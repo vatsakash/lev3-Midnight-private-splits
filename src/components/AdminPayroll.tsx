@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Plus, ShieldCheck, Lock, DollarSign, CheckCircle2, AlertCircle, ArrowRight, Zap, EyeOff } from 'lucide-react';
+import { Plus, ShieldCheck, Lock, DollarSign, CheckCircle2, AlertCircle, ArrowRight, Zap, EyeOff, RefreshCw } from 'lucide-react';
 import { LedgerState, PrivateSalarySplit, LaceWalletState } from '../midnight/types';
 import { MidnightPayrollEngine } from '../midnight/payrollSimulator';
 
@@ -192,10 +192,21 @@ export const AdminPayroll: React.FC<AdminPayrollProps> = ({
               <ul className="text-xs text-emerald-200/90 mt-2 space-y-1 font-mono list-disc list-inside">
                 <li>Go to <strong>Employee Claim</strong> tab to claim private payouts.</li>
                 <li>Go to <strong>Selective Disclosure</strong> tab to run compliance audit reports.</li>
-                <li>Click <strong>Reset Demo / Refresh</strong> icon (top right) to start a new batch.</li>
+                <li>Click <strong>New Batch</strong> in the top header (or use button on right) to start a new batch.</li>
               </ul>
             </div>
           </div>
+
+          <button
+            onClick={() => {
+              engine.resetDemoData();
+              onRefresh();
+            }}
+            className="purple-glow-btn px-4 py-2.5 rounded-xl text-xs font-bold text-white flex items-center gap-2 shrink-0"
+          >
+            <RefreshCw className="w-4 h-4" />
+            Start New Batch
+          </button>
         </div>
       )}
 

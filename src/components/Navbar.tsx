@@ -1,5 +1,5 @@
 import React from 'react';
-import { Shield, Wallet, Cpu, Rocket } from 'lucide-react';
+import { Shield, Wallet, Cpu, Rocket, RefreshCw } from 'lucide-react';
 import { LaceWalletState } from '../midnight/types';
 
 interface NavbarProps {
@@ -128,6 +128,16 @@ export const Navbar: React.FC<NavbarProps> = ({
           >
             <Cpu className="w-3.5 h-3.5" />
             <span>Proofs ({proofLogsCount})</span>
+          </button>
+
+          {/* Reset / New Batch Button */}
+          <button
+            onClick={onResetDemo}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-purple-950/60 hover:bg-purple-900/80 text-purple-300 text-xs font-medium border border-purple-500/30 transition shadow-sm"
+            title="Reset Batch & Start New Payroll"
+          >
+            <RefreshCw className="w-3.5 h-3.5 text-purple-400" />
+            <span>New Batch</span>
           </button>
 
           {walletState.isConnected ? (
