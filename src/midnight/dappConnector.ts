@@ -3,13 +3,12 @@ import { LaceWalletState } from './types';
 declare global {
   interface Window {
     midnight?: {
-      mnLace?: {
-        enable: () => Promise<any>;
-        isEnabled: () => Promise<boolean>;
-        serviceUriConfig: () => Promise<{ indexer: string; prover: string; node: string }>;
-      };
-      lace?: any;
+      '1AM'?: any;
       '1am'?: any;
+      mnLace?: any;
+      lace?: any;
+      oneAm?: any;
+      [key: string]: any;
     };
   }
 }
@@ -83,39 +82,62 @@ export class MidnightDAppConnector {
     }
   }
 
-  // Explicitly set network ID to 'preview' before any wallet or contract operation
   public setNetworkIdExplicitly(netId: 'preview' = 'preview'): 'preview' {
     this.state.networkId = netId;
     return netId;
   }
 
+  // Detect any installed 1AM or Lace extension object on window.midnight
+  public getDetectedWalletExtension(): any | null {
+    if (typeof window === 'undefined' || !window.midnight) {
+      return null;
+    }
+    const m = window.midnight;
+    return m['1AM'] || m['1am'] || m.mnLace || m.lace || m.oneAm || null;
+  }
+
   public async connect(): Promise<LaceWalletState> {
-    // Set network ID explicitly before wallet interaction
     this.setNetworkIdExplicitly('preview');
 
-    // Check if browser has 1AM or Lace Wallet extension
-    if (typeof window !== 'undefined' && (window.midnight?.mnLace || window.midnight?.lace || window.midnight?.['1am'])) {
+    const walletExt = this.getDetectedWalletExtension();
+
+    if (walletExt) {
       try {
-        const wallet = window.midnight.mnLace || window.midnight.lace || window.midnight?.['1am'];
-        const api = await wallet.enable();
-        const state = await api.state();
-        
+        let api = walletExt;
+        if (typeof walletExt.enable === 'function') {
+          api = await walletExt.enable();
+        }
+
+        let address: string | null = null;
+        let coinPublicKey: string | null = null;
+        let encryptionPublicKey: string | null = null;
+
+        if (typeof api.state === 'function') {
+          const st = await api.state();
+          address = st.address || null;
+          coinPublicKey = st.coinPublicKey || null;
+          encryptionPublicKey = st.encryptionPublicKey || null;
+        } else if (typeof api.getAddress === 'function') {
+          address = await api.getAddress();
+        }
+
         this.state = {
           isConnected: true,
-          address: state.address || generateBech32mAddress('1am-user'),
-          coinPublicKey: state.coinPublicKey || '0xabc123...',
-          encryptionPublicKey: state.encryptionPublicKey || '0xdef456...',
+          address: address || generateBech32mAddress('1am-user'),
+          coinPublicKey: coinPublicKey || '0xabc123...',
+          encryptionPublicKey: encryptionPublicKey || '0xdef456...',
           networkId: 'preview',
           balance: 5000000000n,
         };
+
         this.getStorage()?.setItem('lace_connected_address', this.state.address!);
         return this.state;
       } catch (err) {
-        console.warn('1AM/Lace wallet extension enable error, using in-browser 1AM preview provider:', err);
+        console.warn('1AM / Lace extension connection error, switching to 1AM Preview provider fallback:', err);
       }
     }
 
-    // In-browser 1AM Preview wallet connection
+    // In-browser 1AM Preview wallet fallback for environments where extension is loading or in development
     const mockAddress = generateBech32mAddress('1am-preview-user-' + Date.now().toString().slice(-4));
     this.state = {
       isConnected: true,
