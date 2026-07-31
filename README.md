@@ -13,7 +13,6 @@
 
 - 🌐 **Live Deployed App**: [private-splits.vercel.app](https://private-splits.vercel.app)
 - 🎥 **Demo Video Walkthrough**: [Watch Video Demo on Google Drive](https://drive.google.com/file/d/1EtDqa7OfEIXpTFXmZ51Ci7fefmtJVmuZ/view?usp=sharing)
-- 💻 **GitHub Repository**: [github.com/rahul7686/Private-Splits](https://github.com/rahul7686/Private-Splits)
 
 ---
 
