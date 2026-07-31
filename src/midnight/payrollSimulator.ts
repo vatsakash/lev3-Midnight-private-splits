@@ -101,16 +101,24 @@ export class MidnightPayrollEngine {
     return `0x${hex}${hex}${hex}${hex}${hex}${hex}${hex}${hex}`;
   }
 
-  // Interacts with connected 1AM / Lace Wallet browser extension provider
+  // Interacts with connected 1AM / Lace Wallet browser extension provider via UUID discovery
   private async triggerWalletExtensionTx(circuitName: string, payload: any): Promise<string> {
     if (typeof window !== 'undefined' && window.midnight) {
-      const m = window.midnight;
-      const walletExt = m['1AM'] || m['1am'] || m.mnLace || m.lace || m.oneAm;
-      if (walletExt) {
+      const wallets = Object.values(window.midnight).filter(
+        (w: any) => w && (typeof w.connect === 'function' || typeof w.enable === 'function')
+      );
+      if (wallets.length > 0) {
         try {
-          const api = typeof walletExt.enable === 'function' ? await walletExt.enable() : walletExt;
-          if (typeof api.submitTransaction === 'function') {
-            const res = await api.submitTransaction(payload);
+          const selected = wallets[0];
+          let connectedAPI = selected;
+          if (typeof selected.connect === 'function') {
+            connectedAPI = await selected.connect('preview');
+          } else if (typeof selected.enable === 'function') {
+            connectedAPI = await selected.enable();
+          }
+
+          if (connectedAPI && typeof connectedAPI.submitTransaction === 'function') {
+            const res = await connectedAPI.submitTransaction(payload);
             if (res && res.txHash) return res.txHash;
           }
         } catch (e) {

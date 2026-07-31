@@ -4,8 +4,6 @@ declare global {
   interface Window {
     midnight?: Record<string, any>;
     cardano?: Record<string, any>;
-    '1AM'?: any;
-    '1am'?: any;
   }
 }
 
@@ -83,90 +81,80 @@ export class MidnightDAppConnector {
     return netId;
   }
 
-  // Detect any installed 1AM or Lace extension object on window
-  public getDetectedWalletExtension(): any | null {
-    if (typeof window === 'undefined') return null;
+  /**
+   * Discovers all Midnight wallet extensions injected into window.midnight.
+   * According to Midnight DApp Connector API spec, wallets are injected
+   * into window.midnight using UUID keys.
+   */
+  public listDiscoveredWallets(): Array<{ id: string; api: any; name: string }> {
+    if (typeof window === 'undefined' || !window.midnight) {
+      return [];
+    }
 
-    // 1. Check window.midnight object
-    if (window.midnight) {
-      const m = window.midnight;
-      if (m['1AM']) return m['1AM'];
-      if (m['1am']) return m['1am'];
-      if (m.mnLace) return m.mnLace;
-      if (m.lace) return m.lace;
-      if (m.oneAm) return m.oneAm;
-      // Search for any property under window.midnight that has an enable function
-      for (const key of Object.keys(m)) {
-        if (m[key] && typeof m[key].enable === 'function') {
-          return m[key];
-        }
+    const wallets: Array<{ id: string; api: any; name: string }> = [];
+    const entries = Object.entries(window.midnight);
+
+    for (const [id, api] of entries) {
+      if (api && (typeof api.connect === 'function' || typeof api.enable === 'function')) {
+        const name = api.name || api.walletName || `Midnight Wallet (${id.slice(0, 8)})`;
+        wallets.push({ id, api, name });
       }
     }
 
-    // 2. Check direct window['1AM'] or window['1am']
-    if (window['1AM'] && typeof window['1AM'].enable === 'function') return window['1AM'];
-    if (window['1am'] && typeof window['1am'].enable === 'function') return window['1am'];
-
-    // 3. Check window.cardano namespace fallback
-    if (window.cardano) {
-      const c = window.cardano;
-      if (c.midnight) return c.midnight;
-      if (c['1AM']) return c['1AM'];
-      if (c['1am']) return c['1am'];
-      if (c.mnLace) return c.mnLace;
-      if (c.lace) return c.lace;
-    }
-
-    return null;
+    return wallets;
   }
 
   public async connect(): Promise<LaceWalletState> {
     this.setNetworkIdExplicitly('preview');
 
-    const walletExt = this.getDetectedWalletExtension();
+    const discoveredWallets = this.listDiscoveredWallets();
 
-    if (walletExt) {
+    if (discoveredWallets.length > 0) {
+      // Connect to the first discovered wallet (e.g. 1AM / Lace)
+      const selected = discoveredWallets[0];
+      console.log(`Discovered Midnight Wallet Extension: "${selected.name}" (ID: ${selected.id}). Connecting...`);
+
       try {
-        console.log('1AM / Lace Wallet Extension detected on window. Requesting wallet authorization...');
-        
-        let api = walletExt;
-        if (typeof walletExt.enable === 'function') {
-          api = await walletExt.enable();
+        let connectedAPI: any = null;
+        if (typeof selected.api.connect === 'function') {
+          connectedAPI = await selected.api.connect('preview');
+        } else if (typeof selected.api.enable === 'function') {
+          connectedAPI = await selected.api.enable();
         }
 
-        let address: string | null = null;
-        let coinPublicKey: string | null = null;
-        let encryptionPublicKey: string | null = null;
+        if (connectedAPI) {
+          let address: string | null = null;
+          let coinPublicKey: string | null = null;
+          let encryptionPublicKey: string | null = null;
 
-        if (api && typeof api.state === 'function') {
-          const st = await api.state();
-          address = st.address || st.bech32Address || null;
-          coinPublicKey = st.coinPublicKey || null;
-          encryptionPublicKey = st.encryptionPublicKey || null;
-        } else if (api && typeof api.getAddress === 'function') {
-          address = await api.getAddress();
-        } else if (api && typeof api.getChangeAddress === 'function') {
-          address = await api.getChangeAddress();
+          if (typeof connectedAPI.state === 'function') {
+            const st = await connectedAPI.state();
+            address = st.address || st.bech32Address || null;
+            coinPublicKey = st.coinPublicKey || null;
+            encryptionPublicKey = st.encryptionPublicKey || null;
+          } else if (typeof connectedAPI.getAddress === 'function') {
+            address = await connectedAPI.getAddress();
+          }
+
+          this.state = {
+            isConnected: true,
+            address: address || generateBech32mAddress('1am-user'),
+            coinPublicKey: coinPublicKey || '0xabc123...',
+            encryptionPublicKey: encryptionPublicKey || '0xdef456...',
+            networkId: 'preview',
+            balance: 5000000000n,
+          };
+
+          this.getStorage()?.setItem('lace_connected_address', this.state.address!);
+          return this.state;
         }
-
-        this.state = {
-          isConnected: true,
-          address: address || generateBech32mAddress('1am-user'),
-          coinPublicKey: coinPublicKey || '0xabc123...',
-          encryptionPublicKey: encryptionPublicKey || '0xdef456...',
-          networkId: 'preview',
-          balance: 5000000000n,
-        };
-
-        this.getStorage()?.setItem('lace_connected_address', this.state.address!);
-        return this.state;
       } catch (err) {
-        console.warn('User rejected 1AM extension connection or error occurred:', err);
+        console.warn(`Error connecting to discovered wallet "${selected.name}":`, err);
       }
     }
 
-    // In-browser 1AM Preview provider fallback for development/sandbox environments
-    console.info('1AM Browser Extension not detected directly in DOM. Initializing 1AM Preview provider session.');
+    // Interactive simulated connection fallback for development/browser preview when extension is not detected
+    console.info('No Midnight wallet extension found under window.midnight UUID keys. Using 1AM Preview provider session.');
     const mockAddress = generateBech32mAddress('1am-preview-user-' + Date.now().toString().slice(-4));
     this.state = {
       isConnected: true,
