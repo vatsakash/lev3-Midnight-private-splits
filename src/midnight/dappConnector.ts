@@ -14,6 +14,7 @@ export const MIDNIGHT_PREVIEW_CONFIG = {
   indexerWsUri: 'wss://indexer.preview.midnight.network/api/v4/graphql/ws',
   nodeRpcUri: 'https://rpc.preview.midnight.network',
   contractAddress: 'mn_contract_preview1q9x74a87c0v28e53l90qw82k49z6m31f82y01',
+  originalContractHexAddress: '8131a6c88f0b726c57bcf471cf8831947749e4dc68bd458c3692af73605f74d3',
 };
 
 // Generates a Bech32m address formatted for Midnight Preview network

@@ -48,6 +48,10 @@ export const PreviewExplorer: React.FC<PreviewExplorerProps> = ({ ledgerState })
             <div className="text-purple-300 font-bold break-all bg-purple-950/30 p-2.5 rounded border border-purple-800/40">
               {MIDNIGHT_PREVIEW_CONFIG.contractAddress}
             </div>
+            <div className="text-gray-400 text-[11px] pt-1">Original Contract Hex Address:</div>
+            <div className="text-cyan-300 font-bold break-all bg-cyan-950/30 p-2 rounded border border-cyan-800/40 text-[11px]">
+              {MIDNIGHT_PREVIEW_CONFIG.originalContractHexAddress}
+            </div>
             <div className="flex items-center justify-between text-[11px] pt-1">
               <span className="text-gray-400">Network:</span>
               <span className="text-cyan-400 font-semibold">Midnight Preview Network (`preview`)</span>

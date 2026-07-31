@@ -174,7 +174,7 @@ export const ContractDeploy: React.FC<ContractDeployProps> = ({
 
           <div className="space-y-3 font-mono text-xs">
             {/* Deployed Contract Address */}
-            <div className="bg-[#0B0E17] p-4 rounded-xl border border-emerald-800/40 space-y-1">
+            <div className="bg-[#0B0E17] p-4 rounded-xl border border-emerald-800/40 space-y-2">
               <div className="text-gray-400 text-[10px] flex items-center justify-between">
                 <span>DEPLOYED BECH32M CONTRACT ADDRESS</span>
                 <button
@@ -185,8 +185,16 @@ export const ContractDeploy: React.FC<ContractDeployProps> = ({
                   {copied ? 'Copied!' : 'Copy Address'}
                 </button>
               </div>
-              <div className="text-cyan-300 font-bold break-all text-sm py-1">
+              <div className="text-cyan-300 font-bold break-all text-sm py-0.5">
                 {deployResult.contractAddress}
+              </div>
+
+              {/* Original Contract Hex Address */}
+              <div className="pt-2 border-t border-gray-800">
+                <span className="text-gray-500 text-[10px] block">ORIGINAL CONTRACT HEX ADDRESS</span>
+                <span className="text-purple-300 font-bold break-all text-xs font-mono">
+                  {MIDNIGHT_PREVIEW_CONFIG.originalContractHexAddress}
+                </span>
               </div>
             </div>
 
