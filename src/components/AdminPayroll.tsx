@@ -177,6 +177,28 @@ export const AdminPayroll: React.FC<AdminPayrollProps> = ({
         </div>
       )}
 
+      {/* Batch Locked Guidance Banner */}
+      {ledgerState.isFinalized && (
+        <div className="p-5 rounded-2xl bg-emerald-950/40 border border-emerald-500/40 text-emerald-200 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+          <div className="flex items-start gap-3">
+            <div className="p-2 bg-emerald-500/20 rounded-xl text-emerald-400 mt-0.5">
+              <CheckCircle2 className="w-5 h-5" />
+            </div>
+            <div>
+              <h4 className="font-bold text-sm text-white">Payroll Batch Locked & Finalized On-Chain!</h4>
+              <p className="text-xs text-emerald-300/80 mt-1">
+                The ZK salary split commitments are now locked on Midnight Preview. Here is what you can do next:
+              </p>
+              <ul className="text-xs text-emerald-200/90 mt-2 space-y-1 font-mono list-disc list-inside">
+                <li>Go to <strong>Employee Claim</strong> tab to claim private payouts.</li>
+                <li>Go to <strong>Selective Disclosure</strong> tab to run compliance audit reports.</li>
+                <li>Click <strong>Reset Demo / Refresh</strong> icon (top right) to start a new batch.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Grid Layout: Controls & Stats */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Left Column: Step 1 & Step 2 Forms */}
