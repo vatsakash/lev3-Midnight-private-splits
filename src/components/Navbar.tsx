@@ -8,8 +8,8 @@ interface NavbarProps {
   onDisconnect: () => void;
   onToggleLogs: () => void;
   onResetDemo: () => void;
-  activeTab: 'deploy' | 'admin' | 'employee' | 'audit' | 'explorer';
-  setActiveTab: (tab: 'deploy' | 'admin' | 'employee' | 'audit' | 'explorer') => void;
+  activeTab: 'deploy' | 'admin' | 'employee' | 'audit' | 'explorer' | 'integration';
+  setActiveTab: (tab: 'deploy' | 'admin' | 'employee' | 'audit' | 'explorer' | 'integration') => void;
   proofLogsCount: number;
 }
 
@@ -116,6 +116,19 @@ export const Navbar: React.FC<NavbarProps> = ({
             }`}
           >
             Preview Explorer
+          </button>
+          <button
+            onClick={() => {
+              setActiveTab('integration');
+              window.history.pushState({}, '', '/integration');
+            }}
+            className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+              activeTab === 'integration'
+                ? 'bg-purple-600 text-white shadow-md'
+                : 'text-gray-400 hover:text-white hover:bg-gray-800/50'
+            }`}
+          >
+            Diagnostics
           </button>
         </nav>
 

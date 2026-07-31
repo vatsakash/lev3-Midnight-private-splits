@@ -8,6 +8,7 @@ import { PreviewExplorer } from './components/PreviewExplorer';
 import { CircuitLogsModal } from './components/CircuitLogsModal';
 import { MidnightDAppConnector } from './midnight/dappConnector';
 import { MidnightPayrollEngine } from './midnight/payrollSimulator';
+import { DeveloperIntegrationGuide } from './components/DeveloperIntegrationGuide';
 import { LaceWalletState, LedgerState, PrivateSalarySplit, ZkProofLog } from './midnight/types';
 
 export function App() {
@@ -20,18 +21,19 @@ export function App() {
   const [proofLogs, setProofLogs] = useState<ZkProofLog[]>(engine.getProofLogs());
 
   // Derive initial tab from URL path
-  const getInitialTab = (): 'deploy' | 'admin' | 'employee' | 'audit' | 'explorer' => {
+  const getInitialTab = (): 'deploy' | 'admin' | 'employee' | 'audit' | 'explorer' | 'integration' => {
     if (typeof window !== 'undefined') {
       const path = window.location.pathname;
       if (path.includes('deploy')) return 'deploy';
       if (path.includes('employee')) return 'employee';
       if (path.includes('audit')) return 'audit';
       if (path.includes('explorer')) return 'explorer';
+      if (path.includes('integration')) return 'integration';
     }
     return 'deploy'; // Default route is /deploy for contract deployment
   };
 
-  const [activeTab, setActiveTab] = useState<'deploy' | 'admin' | 'employee' | 'audit' | 'explorer'>(getInitialTab());
+  const [activeTab, setActiveTab] = useState<'deploy' | 'admin' | 'employee' | 'audit' | 'explorer' | 'integration'>(getInitialTab());
   const [isLogsModalOpen, setIsLogsModalOpen] = useState(false);
 
   const refreshData = () => {
@@ -119,6 +121,10 @@ export function App() {
 
         {activeTab === 'explorer' && (
           <PreviewExplorer ledgerState={ledgerState} />
+        )}
+
+        {activeTab === 'integration' && (
+          <DeveloperIntegrationGuide walletState={walletState} ledgerState={ledgerState} />
         )}
       </main>
 
