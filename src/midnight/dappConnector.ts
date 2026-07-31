@@ -82,44 +82,73 @@ export class MidnightDAppConnector {
   }
 
   /**
-   * Discovers all Midnight wallet extensions injected into window.midnight.
-   * According to Midnight DApp Connector API spec, wallets are injected
-   * into window.midnight using UUID keys.
+   * Async wallet detection with retry polling (similar to ProofFolio implementation).
+   * Polls every 100ms up to 5 seconds to wait for 1AM / Lace extension content scripts to inject.
    */
-  public listDiscoveredWallets(): Array<{ id: string; api: any; name: string }> {
-    if (typeof window === 'undefined' || !window.midnight) {
-      return [];
-    }
+  public async detectWallet(timeoutMs: number = 5000): Promise<any | null> {
+    if (typeof window === 'undefined') return null;
 
-    const wallets: Array<{ id: string; api: any; name: string }> = [];
-    const entries = Object.entries(window.midnight);
+    const findInWindow = () => {
+      if (!window.midnight) return null;
 
-    for (const [id, api] of entries) {
-      if (api && (typeof api.connect === 'function' || typeof api.enable === 'function')) {
-        const name = api.name || api.walletName || `Midnight Wallet (${id.slice(0, 8)})`;
-        wallets.push({ id, api, name });
+      // 1. Direct keys ('1am', '1AM', 'mnLace', 'lace')
+      const direct =
+        window.midnight['1am'] ||
+        window.midnight['1AM'] ||
+        window.midnight.mnLace ||
+        window.midnight.lace ||
+        window.midnight.oneAm;
+      if (direct && (typeof direct.connect === 'function' || typeof direct.enable === 'function')) {
+        return direct;
       }
-    }
 
-    return wallets;
+      // 2. Dynamic UUID keys injected under window.midnight per Midnight DApp Connector API spec
+      const entries = Object.values(window.midnight);
+      for (const api of entries) {
+        if (api && (typeof api.connect === 'function' || typeof api.enable === 'function')) {
+          return api;
+        }
+      }
+
+      return null;
+    };
+
+    const immediate = findInWindow();
+    if (immediate) return immediate;
+
+    // Retry polling loop
+    return new Promise((resolve) => {
+      let attempts = 0;
+      const maxAttempts = Math.floor(timeoutMs / 100);
+      const interval = setInterval(() => {
+        const found = findInWindow();
+        if (found) {
+          clearInterval(interval);
+          resolve(found);
+        } else if (++attempts >= maxAttempts) {
+          clearInterval(interval);
+          resolve(null);
+        }
+      }, 100);
+    });
   }
 
   public async connect(): Promise<LaceWalletState> {
     this.setNetworkIdExplicitly('preview');
 
-    const discoveredWallets = this.listDiscoveredWallets();
+    console.log('Detecting 1AM / Lace Midnight Wallet Extension in DOM (with polling)...');
+    const wallet = await this.detectWallet(3000);
 
-    if (discoveredWallets.length > 0) {
-      // Connect to the first discovered wallet (e.g. 1AM / Lace)
-      const selected = discoveredWallets[0];
-      console.log(`Discovered Midnight Wallet Extension: "${selected.name}" (ID: ${selected.id}). Connecting...`);
+    if (wallet) {
+      const walletName = wallet.name || wallet.walletName || '1AM Wallet';
+      console.log(`Discovered Midnight Wallet Extension: "${walletName}". Connecting to preview network...`);
 
       try {
         let connectedAPI: any = null;
-        if (typeof selected.api.connect === 'function') {
-          connectedAPI = await selected.api.connect('preview');
-        } else if (typeof selected.api.enable === 'function') {
-          connectedAPI = await selected.api.enable();
+        if (typeof wallet.connect === 'function') {
+          connectedAPI = await wallet.connect('preview');
+        } else if (typeof wallet.enable === 'function') {
+          connectedAPI = await wallet.enable();
         }
 
         if (connectedAPI) {
@@ -127,12 +156,23 @@ export class MidnightDAppConnector {
           let coinPublicKey: string | null = null;
           let encryptionPublicKey: string | null = null;
 
-          if (typeof connectedAPI.state === 'function') {
+          // Try getShieldedAddresses() as in ProofFolio
+          if (typeof connectedAPI.getShieldedAddresses === 'function') {
+            try {
+              const addrs = await connectedAPI.getShieldedAddresses();
+              address = addrs?.shieldedAddress || addrs?.[0] || null;
+            } catch (e) {
+              console.warn('getShieldedAddresses error:', e);
+            }
+          }
+
+          // Fallbacks for state() or getAddress()
+          if (!address && typeof connectedAPI.state === 'function') {
             const st = await connectedAPI.state();
             address = st.address || st.bech32Address || null;
             coinPublicKey = st.coinPublicKey || null;
             encryptionPublicKey = st.encryptionPublicKey || null;
-          } else if (typeof connectedAPI.getAddress === 'function') {
+          } else if (!address && typeof connectedAPI.getAddress === 'function') {
             address = await connectedAPI.getAddress();
           }
 
@@ -149,12 +189,12 @@ export class MidnightDAppConnector {
           return this.state;
         }
       } catch (err) {
-        console.warn(`Error connecting to discovered wallet "${selected.name}":`, err);
+        console.warn(`Error connecting to wallet "${walletName}":`, err);
       }
     }
 
-    // Interactive simulated connection fallback for development/browser preview when extension is not detected
-    console.info('No Midnight wallet extension found under window.midnight UUID keys. Using 1AM Preview provider session.');
+    // In-browser 1AM Preview provider fallback for development/sandbox environments when extension is not detected
+    console.info('1AM Browser Extension not detected after polling. Initializing 1AM Preview provider session.');
     const mockAddress = generateBech32mAddress('1am-preview-user-' + Date.now().toString().slice(-4));
     this.state = {
       isConnected: true,
