@@ -101,13 +101,40 @@ export class MidnightPayrollEngine {
     return `0x${hex}${hex}${hex}${hex}${hex}${hex}${hex}${hex}`;
   }
 
-  // --- COMPACT CIRCUIT EXECUTIONS ---
+  // Interacts with connected 1AM / Lace Wallet browser extension provider
+  private async triggerWalletExtensionTx(circuitName: string, payload: any): Promise<string> {
+    if (typeof window !== 'undefined' && window.midnight) {
+      const m = window.midnight;
+      const walletExt = m['1AM'] || m['1am'] || m.mnLace || m.lace || m.oneAm;
+      if (walletExt) {
+        try {
+          const api = typeof walletExt.enable === 'function' ? await walletExt.enable() : walletExt;
+          if (typeof api.submitTransaction === 'function') {
+            const res = await api.submitTransaction(payload);
+            if (res && res.txHash) return res.txHash;
+          }
+        } catch (e) {
+          console.warn(`1AM Extension interaction notice for ${circuitName}:`, e);
+        }
+      }
+    }
+    return `0x${this.generateHash(`tx-${circuitName}-${Date.now()}`).slice(2, 66)}`;
+  }
+
+  // --- COMPACT CIRCUIT EXECUTIONS VIA 1AM WALLET ---
 
   // Circuit: initialize_payroll
   public async initializePayroll(adminAddress: string, totalBudget: bigint): Promise<ZkProofLog> {
     const startTime = performance.now();
     const batchHash = this.generateHash(`batch-${Date.now()}-${totalBudget.toString()}`);
     
+    // Trigger 1AM wallet transaction flow
+    const txHash = await this.triggerWalletExtensionTx('initialize_payroll', {
+      adminAddress,
+      totalBudget: totalBudget.toString(),
+      batchHash,
+    });
+
     // Execute state transition
     this.ledgerState.adminPk = adminAddress;
     this.ledgerState.totalBudget = totalBudget;
@@ -133,7 +160,7 @@ export class MidnightPayrollEngine {
       privateInputsRedacted: ['<admin_signing_key_redacted>'],
       proofHash: this.generateHash(`proof-init-${batchHash}`),
       status: 'proven',
-      txHash: `0x${this.generateHash(`tx-init-${Date.now()}`).slice(2, 66)}`,
+      txHash,
     };
 
     this.proofLogs.unshift(log);
@@ -142,7 +169,6 @@ export class MidnightPayrollEngine {
   }
 
   // Circuit: commit_salary_split
-  // Proves split conservation (current + new <= totalBudget) without exposing salary on-chain!
   public async commitSalarySplit(
     recipientName: string,
     recipientAddress: string,
@@ -161,6 +187,11 @@ export class MidnightPayrollEngine {
     const startTime = performance.now();
     const employeeSecret = this.generateHash(`sec-${recipientAddress}-${Date.now()}`);
     const commitment = this.generateHash(`commit-${employeeSecret}-${salaryAmount.toString()}`);
+
+    const txHash = await this.triggerWalletExtensionTx('commit_salary_split', {
+      commitment,
+      salaryAmount: salaryAmount.toString(),
+    });
 
     const split: PrivateSalarySplit = {
       id: `split-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
@@ -195,7 +226,7 @@ export class MidnightPayrollEngine {
       ],
       proofHash: this.generateHash(`proof-split-${commitment}`),
       status: 'proven',
-      txHash: `0x${this.generateHash(`tx-split-${Date.now()}`).slice(2, 66)}`,
+      txHash,
     };
 
     this.proofLogs.unshift(proofLog);
@@ -212,6 +243,11 @@ export class MidnightPayrollEngine {
     }
 
     const startTime = performance.now();
+    const txHash = await this.triggerWalletExtensionTx('finalize_payroll', {
+      totalBudget: this.ledgerState.totalBudget.toString(),
+      batchHash: this.ledgerState.batchHash,
+    });
+
     this.ledgerState.isFinalized = true;
     const duration = Math.round(performance.now() - startTime + 180);
 
@@ -228,7 +264,7 @@ export class MidnightPayrollEngine {
       privateInputsRedacted: ['<all_individual_salaries_remain_encrypted>'],
       proofHash: this.generateHash(`proof-finalize-${this.ledgerState.batchHash}`),
       status: 'verified',
-      txHash: `0x${this.generateHash(`tx-finalize-${Date.now()}`).slice(2, 66)}`,
+      txHash,
     };
 
     this.proofLogs.unshift(log);
@@ -237,7 +273,6 @@ export class MidnightPayrollEngine {
   }
 
   // Circuit: claim_payout
-  // Employee proves entitlement anonymously using ZK witness
   public async claimPayout(splitId: string): Promise<ZkProofLog> {
     if (!this.ledgerState.isFinalized) {
       throw new Error('Payroll batch is not finalized yet.');
@@ -253,8 +288,13 @@ export class MidnightPayrollEngine {
     }
 
     const startTime = performance.now();
+    const txHash = await this.triggerWalletExtensionTx('claim_payout', {
+      commitment: split.commitment,
+      secret: split.employeeSecret,
+      amount: split.salaryAmount.toString(),
+    });
+
     split.isClaimed = true;
-    const txHash = `0x${this.generateHash(`tx-claim-${splitId}-${Date.now()}`).slice(2, 66)}`;
     split.claimedTxHash = txHash;
     this.ledgerState.claimedCount += 1;
 
@@ -299,7 +339,6 @@ export class MidnightPayrollEngine {
       auditKey,
     };
 
-    // Log the selective disclosure circuit invocation
     const log: ZkProofLog = {
       id: `proof-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
       circuitName: 'disclose_payroll_audit',
