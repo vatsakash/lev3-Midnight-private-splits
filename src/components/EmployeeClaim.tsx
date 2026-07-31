@@ -1,0 +1,212 @@
+import React, { useState } from 'react';
+import { KeyRound, ShieldCheck, CheckCircle, Zap, AlertCircle, Lock, Download, ExternalLink } from 'lucide-react';
+import { LedgerState, PrivateSalarySplit, LaceWalletState } from '../midnight/types';
+import { MidnightPayrollEngine } from '../midnight/payrollSimulator';
+
+interface EmployeeClaimProps {
+  ledgerState: LedgerState;
+  privateSplits: PrivateSalarySplit[];
+  walletState: LaceWalletState;
+  onRefresh: () => void;
+}
+
+export const EmployeeClaim: React.FC<EmployeeClaimProps> = ({
+  ledgerState,
+  privateSplits,
+  walletState,
+  onRefresh,
+}) => {
+  const engine = MidnightPayrollEngine.getInstance();
+  const [selectedSplitId, setSelectedSplitId] = useState<string>(privateSplits[0]?.id || '');
+  const [isClaiming, setIsClaiming] = useState(false);
+  const [claimMessage, setClaimMessage] = useState<{ type: 'success' | 'error' | 'info'; text: string; txHash?: string } | null>(null);
+
+  const handleClaim = async (splitId: string) => {
+    if (!walletState.isConnected) {
+      setClaimMessage({ type: 'error', text: 'Please connect your Lace wallet to claim.' });
+      return;
+    }
+
+    if (!ledgerState.isFinalized) {
+      setClaimMessage({ type: 'error', text: 'Payroll batch is not finalized yet by the employer.' });
+      return;
+    }
+
+    setIsClaiming(true);
+    setClaimMessage({
+      type: 'info',
+      text: 'Generating zero-knowledge entitlement proof for claim_payout circuit...',
+    });
+
+    try {
+      const proofLog = await engine.claimPayout(splitId);
+      setClaimMessage({
+        type: 'success',
+        text: 'Payout claimed successfully! ZK proof verified on Midnight Preprod.',
+        txHash: proofLog.txHash,
+      });
+      onRefresh();
+    } catch (err: any) {
+      setClaimMessage({ type: 'error', text: err.message || 'Claim failed' });
+    } finally {
+      setIsClaiming(false);
+    }
+  };
+
+  return (
+    <div className="space-y-8">
+      {/* Header Banner */}
+      <div className="glass-panel p-6 rounded-2xl border border-cyan-500/20 bg-gradient-to-r from-[#131929] via-cyan-950/20 to-[#131929]">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="flex items-start gap-4">
+            <div className="p-3 bg-cyan-500/10 rounded-xl border border-cyan-500/30 text-cyan-400">
+              <KeyRound className="w-6 h-6" />
+            </div>
+            <div>
+              <h2 className="text-xl font-bold text-white">Employee Payout Portal</h2>
+              <p className="text-sm text-gray-300 mt-1">
+                Claim your private salary split using your zero-knowledge entitlement proof. No one else can trace your payout amount or link your wallet address to other employees.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Status Message */}
+      {claimMessage && (
+        <div
+          className={`p-4 rounded-xl flex flex-col gap-2 text-sm ${
+            claimMessage.type === 'success'
+              ? 'bg-emerald-950/60 border border-emerald-500/30 text-emerald-300'
+              : claimMessage.type === 'error'
+              ? 'bg-red-950/60 border border-red-500/30 text-red-300'
+              : 'bg-cyan-950/60 border border-cyan-500/30 text-cyan-300'
+          }`}
+        >
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              {claimMessage.type === 'success' && <CheckCircle className="w-5 h-5 text-emerald-400" />}
+              {claimMessage.type === 'error' && <AlertCircle className="w-5 h-5 text-red-400" />}
+              {claimMessage.type === 'info' && <Zap className="w-5 h-5 text-cyan-400 animate-bounce" />}
+              <span>{claimMessage.text}</span>
+            </div>
+            <button onClick={() => setClaimMessage(null)} className="text-xs opacity-70 hover:opacity-100">
+              Dismiss
+            </button>
+          </div>
+          {claimMessage.txHash && (
+            <div className="text-xs font-mono bg-[#0B0E17] p-2 rounded border border-emerald-800/40 text-emerald-400 flex items-center justify-between">
+              <span>On-Chain Tx Hash: {claimMessage.txHash}</span>
+              <span className="text-[10px] bg-emerald-900/60 text-emerald-300 px-2 py-0.5 rounded">Verified</span>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Main Content */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Left: Available Claims */}
+        <div className="lg:col-span-2 space-y-4">
+          <div className="glass-panel p-6 rounded-2xl border border-gray-800">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="font-semibold text-white">Your Encrypted Entitlements</h3>
+              <span className="text-xs text-gray-400 font-mono">
+                Batch Status: {ledgerState.isFinalized ? 'Finalized' : 'Pending Finalization'}
+              </span>
+            </div>
+
+            {privateSplits.length === 0 ? (
+              <div className="text-center py-12 text-gray-500 text-sm">
+                No salary splits available in current batch. Employer must initialize and commit splits first.
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {privateSplits.map((split) => (
+                  <div
+                    key={split.id}
+                    className={`p-5 rounded-2xl border transition-all ${
+                      split.isClaimed
+                        ? 'bg-[#131929]/50 border-gray-800 opacity-80'
+                        : 'bg-[#131929] border-purple-500/30 hover:border-purple-500/60 shadow-lg shadow-purple-950/20'
+                    }`}
+                  >
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <h4 className="font-bold text-white text-base">{split.recipientName}</h4>
+                          {split.isClaimed ? (
+                            <span className="bg-emerald-950 text-emerald-300 text-[10px] px-2.5 py-0.5 rounded-full border border-emerald-500/30 font-semibold">
+                              Claimed
+                            </span>
+                          ) : (
+                            <span className="bg-cyan-950 text-cyan-300 text-[10px] px-2.5 py-0.5 rounded-full border border-cyan-500/30 font-semibold">
+                              Ready to Claim
+                            </span>
+                          )}
+                        </div>
+                        <p className="text-xs text-gray-400 font-mono mt-1">
+                          Commitment: {split.commitment.slice(0, 24)}...
+                        </p>
+                      </div>
+
+                      <div className="flex items-center gap-4">
+                        <div className="text-right">
+                          <div className="text-xs text-gray-400">Salary Payout</div>
+                          <div className="text-lg font-bold text-cyan-400 font-mono">
+                            {split.salaryAmount.toLocaleString()} <span className="text-xs font-normal">tDUST</span>
+                          </div>
+                        </div>
+
+                        {!split.isClaimed && (
+                          <button
+                            onClick={() => handleClaim(split.id)}
+                            disabled={isClaiming || !ledgerState.isFinalized}
+                            className="purple-glow-btn px-4 py-2.5 rounded-xl text-xs font-bold text-white flex items-center gap-1.5 disabled:opacity-40"
+                          >
+                            <Download className="w-4 h-4" />
+                            {isClaiming ? 'Proving...' : 'Claim Payout'}
+                          </button>
+                        )}
+                      </div>
+                    </div>
+
+                    {split.isClaimed && split.claimedTxHash && (
+                      <div className="mt-3 pt-3 border-t border-gray-800 text-xs font-mono text-gray-400 flex items-center justify-between">
+                        <span>Nullifier Verified</span>
+                        <span className="text-emerald-400">{split.claimedTxHash.slice(0, 20)}...</span>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Right: ZK Proof Explanation */}
+        <div className="lg:col-span-1 space-y-6">
+          <div className="glass-panel p-6 rounded-2xl border border-gray-800 space-y-4">
+            <h3 className="font-semibold text-white flex items-center gap-2">
+              <ShieldCheck className="w-5 h-5 text-cyan-400" />
+              Privacy Assurance
+            </h3>
+
+            <div className="space-y-3 text-xs text-gray-300 leading-relaxed">
+              <p>
+                When you click <strong className="text-cyan-300">Claim Payout</strong>, your browser executes a local Midnight zero-knowledge circuit (`claim_payout`).
+              </p>
+              <div className="p-3 bg-[#0B0E17] rounded-xl border border-gray-800 font-mono text-[11px] text-purple-300 space-y-1">
+                <div>Public Input: Commitment Hash</div>
+                <div>Witness: Private Secret Key</div>
+                <div>Output: Valid Claim Proof</div>
+              </div>
+              <p>
+                The Midnight blockchain verifies that your secret key corresponds to a valid salary commitment without learning your identity, your secret key, or your salary amount.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
