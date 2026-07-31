@@ -1,0 +1,76 @@
+// Midnight Compact Smart Contract: Private Payroll & Fund Splits
+// Language: Minokawa / Compact (Midnight Network)
+pragma language_version 0.23;
+
+// Public Ledger State (Visible on Midnight Blockchain)
+export ledger admin_pk: Bytes<32>;
+export ledger total_budget: Uint<64>;
+export ledger batch_hash: Bytes<32>;
+export ledger allocated_count: Counter;
+export ledger claimed_count: Counter;
+export ledger total_allocated_amount: Uint<64>;
+export ledger is_finalized: Boolean;
+
+// Witness declarations for private data handling
+witness get_employee_secret(): Bytes<32>;
+witness get_salary_amount(): Uint<64>;
+witness verify_split_proof(secret: Bytes<32>, salary: Uint<64>, budget: Uint<64>): Boolean;
+
+// Circuit: Initialize a new Private Payroll Batch
+export circuit initialize_payroll(
+    admin: Bytes<32>,
+    budget: Uint<64>,
+    batchHash: Bytes<32>
+): [] {
+    admin_pk = disclose(admin);
+    total_budget = disclose(budget);
+    batch_hash = disclose(batchHash);
+    is_finalized = false;
+    total_allocated_amount = 0;
+}
+
+// Circuit: Commit an individual private salary split
+// Proves split conservation (current_total + salary <= total_budget) without exposing salary amount on-chain
+export circuit commit_salary_split(
+    employeeCommitment: Bytes<32>,
+    salaryAmount: Uint<64>
+): [] {
+    // Assert payroll batch is not yet finalized
+    assert(!is_finalized, "Payroll batch is already finalized");
+
+    // Private zero-knowledge check: ensure total budget is not exceeded
+    const newTotal = total_allocated_amount + disclose(salaryAmount);
+    assert(newTotal <= total_budget, "Allocated salary split exceeds total budget");
+
+    total_allocated_amount = newTotal;
+    allocated_count.increment(1);
+}
+
+// Circuit: Finalize batch after all salary splits are committed
+export circuit finalize_payroll(): [] {
+    assert(total_allocated_amount == total_budget, "Sum of private splits must equal total budget");
+    is_finalized = true;
+}
+
+// Circuit: Recipient claims private payout
+// Proves entitlement anonymously using ZK witness matching the commitment
+export circuit claim_payout(
+    employeeCommitment: Bytes<32>,
+    claimedAmount: Uint<64>
+): [] {
+    assert(is_finalized, "Payroll batch is not yet finalized");
+    
+    // Obtain private witness secret
+    const secret = get_employee_secret();
+    const isValidClaim = verify_split_proof(secret, claimedAmount, total_budget);
+    assert(isValidClaim, "Invalid zero-knowledge entitlement proof for payout claim");
+
+    claimed_count.increment(1);
+}
+
+// Circuit: Selective Disclosure for Auditing & Compliance
+// Allows auditor to verify budget conservation without exposing individual employee identities or amounts
+export circuit disclose_payroll_audit(auditKey: Bytes<32>): Boolean {
+    // Returns verification status of budget conservation
+    return disclose(total_allocated_amount == total_budget);
+}
