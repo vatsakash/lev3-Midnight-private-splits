@@ -29,9 +29,17 @@ export class MidnightPayrollEngine {
     return MidnightPayrollEngine.instance;
   }
 
+  private getStorage(): Storage | null {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      return window.localStorage;
+    }
+    return null;
+  }
+
   private loadPersistedState() {
     try {
-      const savedLedger = localStorage.getItem('midnight_payroll_ledger');
+      const storage = this.getStorage();
+      const savedLedger = storage?.getItem('midnight_payroll_ledger');
       if (savedLedger) {
         const parsed = JSON.parse(savedLedger);
         this.ledgerState = {
@@ -41,7 +49,7 @@ export class MidnightPayrollEngine {
         };
       }
 
-      const savedSplits = localStorage.getItem('midnight_payroll_splits');
+      const savedSplits = storage?.getItem('midnight_payroll_splits');
       if (savedSplits) {
         const parsed = JSON.parse(savedSplits);
         this.privateSplits = parsed.map((item: any) => ({
@@ -50,7 +58,7 @@ export class MidnightPayrollEngine {
         }));
       }
 
-      const savedLogs = localStorage.getItem('midnight_proof_logs');
+      const savedLogs = storage?.getItem('midnight_proof_logs');
       if (savedLogs) {
         this.proofLogs = JSON.parse(savedLogs);
       }
@@ -61,20 +69,23 @@ export class MidnightPayrollEngine {
 
   private saveState() {
     try {
+      const storage = this.getStorage();
+      if (!storage) return;
+
       const serializableLedger = {
         ...this.ledgerState,
         totalBudget: this.ledgerState.totalBudget.toString(),
         totalAllocatedAmount: this.ledgerState.totalAllocatedAmount.toString(),
       };
-      localStorage.setItem('midnight_payroll_ledger', JSON.stringify(serializableLedger));
+      storage.setItem('midnight_payroll_ledger', JSON.stringify(serializableLedger));
 
       const serializableSplits = this.privateSplits.map((item) => ({
         ...item,
         salaryAmount: item.salaryAmount.toString(),
       }));
-      localStorage.setItem('midnight_payroll_splits', JSON.stringify(serializableSplits));
+      storage.setItem('midnight_payroll_splits', JSON.stringify(serializableSplits));
 
-      localStorage.setItem('midnight_proof_logs', JSON.stringify(this.proofLogs));
+      storage.setItem('midnight_proof_logs', JSON.stringify(this.proofLogs));
     } catch (e) {
       console.error('Error saving state:', e);
     }
@@ -323,9 +334,24 @@ export class MidnightPayrollEngine {
   }
 
   public resetDemoData() {
-    localStorage.removeItem('midnight_payroll_ledger');
-    localStorage.removeItem('midnight_payroll_splits');
-    localStorage.removeItem('midnight_proof_logs');
-    this.loadPersistedState();
+    const storage = this.getStorage();
+    if (storage) {
+      storage.removeItem('midnight_payroll_ledger');
+      storage.removeItem('midnight_payroll_splits');
+      storage.removeItem('midnight_proof_logs');
+    }
+    this.ledgerState = {
+      adminPk: '0x' + Array.from({ length: 64 }, () => '0').join(''),
+      totalBudget: 0n,
+      batchHash: '0x' + Array.from({ length: 64 }, () => '0').join(''),
+      allocatedCount: 0,
+      claimedCount: 0,
+      totalAllocatedAmount: 0n,
+      isFinalized: false,
+      contractAddress: PREPROD_CONFIG.contractAddress,
+      deploymentNetwork: 'preprod',
+    };
+    this.privateSplits = [];
+    this.proofLogs = [];
   }
 }

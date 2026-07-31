@@ -58,8 +58,16 @@ export class MidnightDAppConnector {
     return MidnightDAppConnector.instance;
   }
 
+  private getStorage(): Storage | null {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      return window.localStorage;
+    }
+    return null;
+  }
+
   private restoreSession() {
-    const savedAddress = localStorage.getItem('lace_connected_address');
+    const storage = this.getStorage();
+    const savedAddress = storage?.getItem('lace_connected_address');
     if (savedAddress) {
       this.state = {
         isConnected: true,
@@ -88,7 +96,7 @@ export class MidnightDAppConnector {
           networkId: 'preprod',
           balance: 2500000000n,
         };
-        localStorage.setItem('lace_connected_address', this.state.address!);
+        this.getStorage()?.setItem('lace_connected_address', this.state.address!);
         return this.state;
       } catch (err) {
         console.warn('Lace wallet extension enable error, falling back to simulated Midnight DApp connector:', err);
@@ -105,7 +113,7 @@ export class MidnightDAppConnector {
       networkId: 'preprod',
       balance: 1000000000n,
     };
-    localStorage.setItem('lace_connected_address', mockAddress);
+    this.getStorage()?.setItem('lace_connected_address', mockAddress);
     return this.state;
   }
 
@@ -118,7 +126,7 @@ export class MidnightDAppConnector {
       networkId: 'preprod',
       balance: 0n,
     };
-    localStorage.removeItem('lace_connected_address');
+    this.getStorage()?.removeItem('lace_connected_address');
     return this.state;
   }
 
