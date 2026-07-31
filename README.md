@@ -14,6 +14,17 @@
 - 🌐 **Live Deployed App**: [private-splits.vercel.app](https://private-splits.vercel.app)
 - 🎥 **Demo Video Walkthrough**: [Watch Video Demo on Google Drive](https://drive.google.com/file/d/1EtDqa7OfEIXpTFXmZ51Ci7fefmtJVmuZ/view?usp=sharing)
 
+### 📸 Application & Deployment Screenshots
+
+#### 1. 1AM Extension Browser Contract Deployment (`/deploy`)
+![1AM Extension Browser Contract Deployment](docs/screenshots/browser_deploy_desktop.png)
+
+#### 2. Responsive Application Layout
+![Responsive App Layout](docs/screenshots/browser_deploy_mobile.png)
+
+#### 3. Verified CI/CD Pipeline & Vercel Deployment Checks
+![All Checks Passed - Vercel & CI/CD](docs/screenshots/ci_cd_vercel_checks.png)
+
 ---
 
 ## 1AM Extension Browser Contract Deployment (`/deploy`)
