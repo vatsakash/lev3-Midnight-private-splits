@@ -1,7 +1,7 @@
-# Product Proposal: Private Payroll & Splits on Midnight Network
+# Product Proposal: Private Payroll & Splits on Midnight Network (1AM Preview)
 
 ## Executive Summary
-**Private Payroll / Splits** is a zero-knowledge confidential fund distribution application designed for web3 organizations, DAOs, companies, and freelancers. Built on the **Midnight Network** using the **Compact / Minokawa** smart contract language, it enables organizations to disburse funds and execute salary splits without exposing recipient wallet identities or individual compensation figures on a public blockchain ledger.
+**Private Payroll / Splits** is a zero-knowledge confidential fund distribution application designed for web3 organizations, DAOs, companies, and freelancers. Built on the **Midnight Network** (Preview Network) using the **Compact / Minokawa** smart contract language, it enables organizations to disburse funds and execute salary splits without exposing recipient wallet identities or individual compensation figures on a public blockchain ledger.
 
 ---
 
@@ -21,27 +21,9 @@ Standard public blockchains (Ethereum, Solana, Cardano) publish all transaction 
 
 ---
 
-## System Architecture
-
-```mermaid
-flowchart TD
-    Employer[Employer / Admin] -->|1. Set Budget & Hash| InitCircuit[initialize_payroll Circuit]
-    Employer -->|2. Commit Private Split| SplitCircuit[commit_salary_split Circuit]
-    SplitCircuit -->|Generates ZK Proof| Ledger[(Midnight Public Ledger)]
-    
-    Employee[Employee / Recipient] -->|3. Provide Secret Witness| ClaimCircuit[claim_payout Circuit]
-    ClaimCircuit -->|Verifies Entitlement| Ledger
-    ClaimCircuit -->|Payout Received| Wallet[Lace Wallet]
-    
-    Auditor[Auditor / Regulator] -->|4. Request Audit| AuditCircuit[disclose_payroll_audit Circuit]
-    AuditCircuit -->|Selective Disclosure Proof| Auditor
-```
-
----
-
 ## Technical Stack
 - **Smart Contract**: Midnight Compact (Minokawa) DSL v0.23
-- **DApp Connector**: Midnight Lace Wallet API (`@midnight-ntwrk/dapp-connector-api`)
+- **DApp Connector**: 1AM / Lace Wallet API (`@midnight-ntwrk/dapp-connector-api`)
 - **ZK Circuit Simulator**: Midnight.js Client Runtime & Simulator
 - **Frontend**: React 18, Vite, TypeScript, TailwindCSS
 - **Testing**: Vitest Suite (4 unit & privacy tests passing)
@@ -52,7 +34,7 @@ flowchart TD
 ## Product Features & User Flows
 
 ### 1. Employer Dashboard
-- Initialize payroll batch with total budget in tDUST.
+- Initialize payroll batch with total budget in tNIGHT.
 - Add private employee salary commitments.
 - Real-time ZK budget conservation proof generation (`current_sum + split <= total_budget`).
 - Batch finalization to lock commitments.
@@ -60,7 +42,7 @@ flowchart TD
 ### 2. Employee Claim Portal
 - View encrypted entitlement commitments.
 - Generate local zero-knowledge proof of entitlement using employee secret key.
-- Claim private payout directly into Lace wallet without revealing salary amount to co-workers.
+- Claim private payout directly into 1AM wallet without revealing salary amount to co-workers.
 
 ### 3. Auditor Selective Disclosure
 - Execute compliance audit circuit (`disclose_payroll_audit`).
@@ -75,8 +57,9 @@ flowchart TD
 
 ---
 
-## Roadmap & Preprod Deployment
-- **Preprod Smart Contract**: `mn_contract_preprod1q9x74a87c0v28e53l90qw82k49z6m31f82y01`
-- **GraphQL Indexer**: `https://indexer.preprod.midnight.network/api/v4/graphql`
-- **Phase 1 (Complete)**: Compact contract, Lace wallet connector, ZK simulator, full UI, Vitest suite, and GitHub CI/CD.
+## Roadmap & Preview Deployment
+- **Preview Smart Contract**: `mn_contract_preview1q9x74a87c0v28e53l90qw82k49z6m31f82y01`
+- **GraphQL Indexer**: `https://indexer.preview.midnight.network/api/v4/graphql`
+- **Node RPC**: `https://rpc.preview.midnight.network`
+- **Phase 1 (Complete)**: Compact contract, 1AM wallet connector, ZK simulator, full UI, Vitest suite, and GitHub CI/CD on Preview network.
 - **Phase 2 (Future)**: Multi-token support (NATIVE + Custom ZK Assets), scheduled recurring payroll streams.

@@ -127,7 +127,7 @@ export class MidnightPayrollEngine {
       provingTimeMs: duration,
       publicInputs: {
         adminPk: adminAddress,
-        totalBudget: totalBudget.toString() + ' tDUST',
+        totalBudget: totalBudget.toString() + ' tNIGHT',
         batchHash,
       },
       privateInputsRedacted: ['<admin_signing_key_redacted>'],
@@ -191,7 +191,7 @@ export class MidnightPayrollEngine {
       },
       privateInputsRedacted: [
         `<recipient_identity_redacted: ${recipientName}>`,
-        `<private_salary_amount_redacted: ${salaryAmount} tDUST>`,
+        `<private_salary_amount_redacted: ${salaryAmount} tNIGHT>`,
       ],
       proofHash: this.generateHash(`proof-split-${commitment}`),
       status: 'proven',
@@ -272,7 +272,7 @@ export class MidnightPayrollEngine {
       },
       privateInputsRedacted: [
         `<employee_secret_key_redacted>`,
-        `<private_claimed_amount_redacted: ${split.salaryAmount} tDUST>`,
+        `<private_claimed_amount_redacted: ${split.salaryAmount} tNIGHT>`,
       ],
       proofHash: this.generateHash(`proof-claim-${split.commitment}`),
       status: 'proven',

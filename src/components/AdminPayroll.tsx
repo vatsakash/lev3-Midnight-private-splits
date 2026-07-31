@@ -47,7 +47,7 @@ export const AdminPayroll: React.FC<AdminPayrollProps> = ({
 
     try {
       await engine.initializePayroll(walletState.address || 'mn_addr_test_admin', budget);
-      setStatusMessage({ type: 'success', text: `Payroll initialized on-chain with ${budget.toString()} tDUST total budget.` });
+      setStatusMessage({ type: 'success', text: `Payroll initialized on-chain with ${budget.toString()} tNIGHT total budget.` });
       onRefresh();
     } catch (err: any) {
       setStatusMessage({ type: 'error', text: err.message || 'Initialization failed' });
@@ -93,7 +93,7 @@ export const AdminPayroll: React.FC<AdminPayrollProps> = ({
       setSalaryInput('');
       setStatusMessage({
         type: 'success',
-        text: `Private split committed! Zero-knowledge proof created for ${amount.toString()} tDUST allocation.`,
+        text: `Private split committed! Zero-knowledge proof created for ${amount.toString()} tNIGHT allocation.`,
       });
       onRefresh();
     } catch (err: any) {
@@ -105,7 +105,7 @@ export const AdminPayroll: React.FC<AdminPayrollProps> = ({
 
   const handleFinalizeBatch = async () => {
     setIsFinalizing(true);
-    setStatusMessage({ type: 'info', text: 'Executing finalize_payroll circuit on Midnight Preprod...' });
+    setStatusMessage({ type: 'info', text: 'Executing finalize_payroll circuit on Midnight Preview...' });
 
     try {
       await engine.finalizePayroll();
@@ -199,7 +199,7 @@ export const AdminPayroll: React.FC<AdminPayrollProps> = ({
 
             <form onSubmit={handleInitialize} className="space-y-4">
               <div>
-                <label className="block text-xs text-gray-400 mb-1">Total Payroll Budget (tDUST)</label>
+                <label className="block text-xs text-gray-400 mb-1">Total Payroll Budget (tNIGHT)</label>
                 <div className="relative">
                   <DollarSign className="w-4 h-4 text-gray-500 absolute left-3 top-3" />
                   <input
@@ -270,7 +270,7 @@ export const AdminPayroll: React.FC<AdminPayrollProps> = ({
               </div>
 
               <div>
-                <label className="block text-xs text-gray-400 mb-1">Private Salary Split (tDUST)</label>
+                <label className="block text-xs text-gray-400 mb-1">Private Salary Split (tNIGHT)</label>
                 <input
                   type="number"
                   value={salaryInput}
@@ -338,19 +338,19 @@ export const AdminPayroll: React.FC<AdminPayrollProps> = ({
               <div className="bg-[#0B0E17] p-3.5 rounded-xl border border-gray-800">
                 <span className="text-xs text-gray-400 block">Total Budget</span>
                 <span className="text-lg font-bold text-cyan-400 font-mono">
-                  {ledgerState.totalBudget.toLocaleString()} <span className="text-xs font-normal">tDUST</span>
+                  {ledgerState.totalBudget.toLocaleString()} <span className="text-xs font-normal">tNIGHT</span>
                 </span>
               </div>
               <div className="bg-[#0B0E17] p-3.5 rounded-xl border border-gray-800">
                 <span className="text-xs text-gray-400 block">Allocated Sum</span>
                 <span className="text-lg font-bold text-purple-300 font-mono">
-                  {ledgerState.totalAllocatedAmount.toLocaleString()} <span className="text-xs font-normal">tDUST</span>
+                  {ledgerState.totalAllocatedAmount.toLocaleString()} <span className="text-xs font-normal">tNIGHT</span>
                 </span>
               </div>
               <div className="bg-[#0B0E17] p-3.5 rounded-xl border border-gray-800">
                 <span className="text-xs text-gray-400 block">Unallocated</span>
                 <span className="text-lg font-bold text-gray-300 font-mono">
-                  {remainingBudget.toLocaleString()} <span className="text-xs font-normal">tDUST</span>
+                  {remainingBudget.toLocaleString()} <span className="text-xs font-normal">tNIGHT</span>
                 </span>
               </div>
               <div className="bg-[#0B0E17] p-3.5 rounded-xl border border-gray-800">
@@ -411,7 +411,7 @@ export const AdminPayroll: React.FC<AdminPayrollProps> = ({
                           {split.commitment.slice(0, 20)}...
                         </td>
                         <td className="py-3 text-right font-mono text-cyan-300 font-semibold">
-                          {split.salaryAmount.toLocaleString()} tDUST
+                          {split.salaryAmount.toLocaleString()} tNIGHT
                         </td>
                         <td className="py-3 text-center">
                           {split.isClaimed ? (

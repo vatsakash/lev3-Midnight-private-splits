@@ -33,7 +33,7 @@ describe('Private Payroll & Splits Compact Contract Suite', () => {
 
     await engine.initializePayroll(adminAddress, totalBudget);
 
-    // Commit 1st split: 6000 tDUST
+    // Commit 1st split: 6000 tNIGHT
     const { split: split1, proofLog: proof1 } = await engine.commitSalarySplit(
       'Alice',
       'mn_addr_test1qalice',
@@ -43,7 +43,7 @@ describe('Private Payroll & Splits Compact Contract Suite', () => {
     expect(split1.commitment).toContain('0x');
     expect(proof1.publicInputs.splitConservationVerified).toBe(true);
 
-    // Commit 2nd split: 4000 tDUST
+    // Commit 2nd split: 4000 tNIGHT
     await engine.commitSalarySplit('Bob', 'mn_addr_test1qbob', 4000n);
 
     const ledger = engine.getLedgerState();

@@ -4,7 +4,7 @@ import { ContractDeploy } from './components/ContractDeploy';
 import { AdminPayroll } from './components/AdminPayroll';
 import { EmployeeClaim } from './components/EmployeeClaim';
 import { AuditDisclosure } from './components/AuditDisclosure';
-import { PreprodExplorer } from './components/PreprodExplorer';
+import { PreviewExplorer } from './components/PreviewExplorer';
 import { CircuitLogsModal } from './components/CircuitLogsModal';
 import { MidnightDAppConnector } from './midnight/dappConnector';
 import { MidnightPayrollEngine } from './midnight/payrollSimulator';
@@ -118,7 +118,7 @@ export function App() {
         )}
 
         {activeTab === 'explorer' && (
-          <PreprodExplorer ledgerState={ledgerState} />
+          <PreviewExplorer ledgerState={ledgerState} />
         )}
       </main>
 

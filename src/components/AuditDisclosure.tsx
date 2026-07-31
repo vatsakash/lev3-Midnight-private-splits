@@ -62,7 +62,7 @@ export const AuditDisclosure: React.FC<AuditDisclosureProps> = ({ ledgerState })
             <li className="flex items-start gap-2 bg-[#0B0E17] p-3 rounded-xl border border-gray-800">
               <CheckCircle2 className="w-4 h-4 text-cyan-400 shrink-0 mt-0.5" />
               <div>
-                <strong className="text-cyan-300">Total Payroll Budget:</strong> The total funds allocated to the batch ({ledgerState.totalBudget.toString()} tDUST).
+                <strong className="text-cyan-300">Total Payroll Budget:</strong> The total funds allocated to the batch ({ledgerState.totalBudget.toString()} tNIGHT).
               </div>
             </li>
             <li className="flex items-start gap-2 bg-[#0B0E17] p-3 rounded-xl border border-gray-800">
@@ -172,7 +172,7 @@ export const AuditDisclosure: React.FC<AuditDisclosureProps> = ({ ledgerState })
               </div>
               <div>
                 <span className="text-gray-500 block text-[10px]">TOTAL ALLOCATED BUDGET</span>
-                <span className="text-cyan-400 font-bold">{report.totalAllocated.toString()} tDUST</span>
+                <span className="text-cyan-400 font-bold">{report.totalAllocated.toString()} tNIGHT</span>
               </div>
               <div>
                 <span className="text-gray-500 block text-[10px]">INDIVIDUAL SALARIES EXPOSED</span>

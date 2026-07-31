@@ -7,7 +7,7 @@ interface PreviewExplorerProps {
   ledgerState: LedgerState;
 }
 
-export const PreprodExplorer: React.FC<PreviewExplorerProps> = ({ ledgerState }) => {
+export const PreviewExplorer: React.FC<PreviewExplorerProps> = ({ ledgerState }) => {
   return (
     <div className="space-y-8">
       {/* Top Banner */}

@@ -7,7 +7,7 @@ export interface LedgerState {
   totalAllocatedAmount: bigint;
   isFinalized: boolean;
   contractAddress: string;
-  deploymentNetwork: 'preview' | 'preprod' | 'localnet';
+  deploymentNetwork: 'preview' | 'localnet';
 }
 
 export interface PrivateSalarySplit {
@@ -39,7 +39,7 @@ export interface LaceWalletState {
   address: string | null; // Bech32m format e.g. mn_addr_preview1...
   coinPublicKey: string | null;
   encryptionPublicKey: string | null;
-  networkId: 'preview' | 'preprod' | 'localnet';
+  networkId: 'preview' | 'localnet';
   balance: bigint;
 }
 
