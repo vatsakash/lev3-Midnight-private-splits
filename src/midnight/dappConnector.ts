@@ -2,14 +2,10 @@ import { LaceWalletState } from './types';
 
 declare global {
   interface Window {
-    midnight?: {
-      '1AM'?: any;
-      '1am'?: any;
-      mnLace?: any;
-      lace?: any;
-      oneAm?: any;
-      [key: string]: any;
-    };
+    midnight?: Record<string, any>;
+    cardano?: Record<string, any>;
+    '1AM'?: any;
+    '1am'?: any;
   }
 }
 
@@ -87,13 +83,41 @@ export class MidnightDAppConnector {
     return netId;
   }
 
-  // Detect any installed 1AM or Lace extension object on window.midnight
+  // Detect any installed 1AM or Lace extension object on window
   public getDetectedWalletExtension(): any | null {
-    if (typeof window === 'undefined' || !window.midnight) {
-      return null;
+    if (typeof window === 'undefined') return null;
+
+    // 1. Check window.midnight object
+    if (window.midnight) {
+      const m = window.midnight;
+      if (m['1AM']) return m['1AM'];
+      if (m['1am']) return m['1am'];
+      if (m.mnLace) return m.mnLace;
+      if (m.lace) return m.lace;
+      if (m.oneAm) return m.oneAm;
+      // Search for any property under window.midnight that has an enable function
+      for (const key of Object.keys(m)) {
+        if (m[key] && typeof m[key].enable === 'function') {
+          return m[key];
+        }
+      }
     }
-    const m = window.midnight;
-    return m['1AM'] || m['1am'] || m.mnLace || m.lace || m.oneAm || null;
+
+    // 2. Check direct window['1AM'] or window['1am']
+    if (window['1AM'] && typeof window['1AM'].enable === 'function') return window['1AM'];
+    if (window['1am'] && typeof window['1am'].enable === 'function') return window['1am'];
+
+    // 3. Check window.cardano namespace fallback
+    if (window.cardano) {
+      const c = window.cardano;
+      if (c.midnight) return c.midnight;
+      if (c['1AM']) return c['1AM'];
+      if (c['1am']) return c['1am'];
+      if (c.mnLace) return c.mnLace;
+      if (c.lace) return c.lace;
+    }
+
+    return null;
   }
 
   public async connect(): Promise<LaceWalletState> {
@@ -103,6 +127,8 @@ export class MidnightDAppConnector {
 
     if (walletExt) {
       try {
+        console.log('1AM / Lace Wallet Extension detected on window. Requesting wallet authorization...');
+        
         let api = walletExt;
         if (typeof walletExt.enable === 'function') {
           api = await walletExt.enable();
@@ -112,13 +138,15 @@ export class MidnightDAppConnector {
         let coinPublicKey: string | null = null;
         let encryptionPublicKey: string | null = null;
 
-        if (typeof api.state === 'function') {
+        if (api && typeof api.state === 'function') {
           const st = await api.state();
-          address = st.address || null;
+          address = st.address || st.bech32Address || null;
           coinPublicKey = st.coinPublicKey || null;
           encryptionPublicKey = st.encryptionPublicKey || null;
-        } else if (typeof api.getAddress === 'function') {
+        } else if (api && typeof api.getAddress === 'function') {
           address = await api.getAddress();
+        } else if (api && typeof api.getChangeAddress === 'function') {
+          address = await api.getChangeAddress();
         }
 
         this.state = {
@@ -133,11 +161,12 @@ export class MidnightDAppConnector {
         this.getStorage()?.setItem('lace_connected_address', this.state.address!);
         return this.state;
       } catch (err) {
-        console.warn('1AM / Lace extension connection error, switching to 1AM Preview provider fallback:', err);
+        console.warn('User rejected 1AM extension connection or error occurred:', err);
       }
     }
 
-    // In-browser 1AM Preview wallet fallback for environments where extension is loading or in development
+    // In-browser 1AM Preview provider fallback for development/sandbox environments
+    console.info('1AM Browser Extension not detected directly in DOM. Initializing 1AM Preview provider session.');
     const mockAddress = generateBech32mAddress('1am-preview-user-' + Date.now().toString().slice(-4));
     this.state = {
       isConnected: true,
