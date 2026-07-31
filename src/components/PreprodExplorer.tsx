@@ -1,13 +1,13 @@
 import React from 'react';
-import { Database, ExternalLink, Network, CheckCircle, Server, Code } from 'lucide-react';
+import { Database, Network, Server, Code } from 'lucide-react';
 import { LedgerState } from '../midnight/types';
-import { PREPROD_CONFIG } from '../midnight/dappConnector';
+import { MIDNIGHT_PREVIEW_CONFIG } from '../midnight/dappConnector';
 
-interface PreprodExplorerProps {
+interface PreviewExplorerProps {
   ledgerState: LedgerState;
 }
 
-export const PreprodExplorer: React.FC<PreprodExplorerProps> = ({ ledgerState }) => {
+export const PreprodExplorer: React.FC<PreviewExplorerProps> = ({ ledgerState }) => {
   return (
     <div className="space-y-8">
       {/* Top Banner */}
@@ -19,7 +19,7 @@ export const PreprodExplorer: React.FC<PreprodExplorerProps> = ({ ledgerState })
             </div>
             <div>
               <h2 className="text-xl font-bold text-white flex items-center gap-2">
-                Midnight Preprod Network Inspector
+                Midnight Preview Network Inspector
               </h2>
               <p className="text-sm text-gray-300 mt-1">
                 Verifiable on-chain smart contract deployment and network indexing endpoints.
@@ -29,7 +29,7 @@ export const PreprodExplorer: React.FC<PreprodExplorerProps> = ({ ledgerState })
 
           <div className="flex items-center gap-2 bg-emerald-950/80 text-emerald-300 px-3.5 py-1.5 rounded-xl border border-emerald-500/40 text-xs font-mono">
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-            Preprod Network Active
+            1AM Preview Network Active
           </div>
         </div>
       </div>
@@ -46,11 +46,11 @@ export const PreprodExplorer: React.FC<PreprodExplorerProps> = ({ ledgerState })
           <div className="bg-[#0B0E17] p-4 rounded-xl border border-gray-800 space-y-2 font-mono text-xs">
             <div className="text-gray-400 text-[11px]">Bech32m Contract Address:</div>
             <div className="text-purple-300 font-bold break-all bg-purple-950/30 p-2.5 rounded border border-purple-800/40">
-              {PREPROD_CONFIG.contractAddress}
+              {MIDNIGHT_PREVIEW_CONFIG.contractAddress}
             </div>
             <div className="flex items-center justify-between text-[11px] pt-1">
               <span className="text-gray-400">Network:</span>
-              <span className="text-cyan-400 font-semibold">Midnight Preprod Testnet</span>
+              <span className="text-cyan-400 font-semibold">Midnight Preview Network (`preview`)</span>
             </div>
             <div className="flex items-center justify-between text-[11px]">
               <span className="text-gray-400">Compiler:</span>
@@ -69,12 +69,12 @@ export const PreprodExplorer: React.FC<PreprodExplorerProps> = ({ ledgerState })
           <div className="space-y-3 font-mono text-xs">
             <div className="bg-[#0B0E17] p-3 rounded-xl border border-gray-800">
               <div className="text-gray-400 text-[10px]">INDEXER GRAPHQL ENDPOINT</div>
-              <div className="text-cyan-300 truncate mt-0.5">{PREPROD_CONFIG.indexerUri}</div>
+              <div className="text-cyan-300 truncate mt-0.5">{MIDNIGHT_PREVIEW_CONFIG.indexerUri}</div>
             </div>
 
             <div className="bg-[#0B0E17] p-3 rounded-xl border border-gray-800">
               <div className="text-gray-400 text-[10px]">NODE RPC ENDPOINT</div>
-              <div className="text-purple-300 truncate mt-0.5">{PREPROD_CONFIG.nodeRpcUri}</div>
+              <div className="text-purple-300 truncate mt-0.5">{MIDNIGHT_PREVIEW_CONFIG.nodeRpcUri}</div>
             </div>
           </div>
         </div>
@@ -95,7 +95,7 @@ export const PreprodExplorer: React.FC<PreprodExplorerProps> = ({ ledgerState })
             </div>
             <div>
               <span className="text-gray-500 block text-[10px]">TOTAL PUBLIC BUDGET</span>
-              <span className="text-cyan-400 font-bold">{ledgerState.totalBudget.toString()} tDUST</span>
+              <span className="text-cyan-400 font-bold">{ledgerState.totalBudget.toString()} tNIGHT</span>
             </div>
             <div>
               <span className="text-gray-500 block text-[10px]">BATCH HASH COMMITMENT</span>

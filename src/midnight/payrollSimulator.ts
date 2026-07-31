@@ -1,5 +1,5 @@
 import { LedgerState, PrivateSalarySplit, ZkProofLog, SelectiveDisclosureReport } from './types';
-import { PREPROD_CONFIG, generateBech32mAddress } from './dappConnector';
+import { MIDNIGHT_PREVIEW_CONFIG, generateBech32mAddress } from './dappConnector';
 
 export class MidnightPayrollEngine {
   private static instance: MidnightPayrollEngine;
@@ -16,8 +16,8 @@ export class MidnightPayrollEngine {
       claimedCount: 0,
       totalAllocatedAmount: 0n,
       isFinalized: false,
-      contractAddress: PREPROD_CONFIG.contractAddress,
-      deploymentNetwork: 'preprod',
+      contractAddress: MIDNIGHT_PREVIEW_CONFIG.contractAddress,
+      deploymentNetwork: 'preview',
     };
     this.loadPersistedState();
   }
@@ -348,8 +348,8 @@ export class MidnightPayrollEngine {
       claimedCount: 0,
       totalAllocatedAmount: 0n,
       isFinalized: false,
-      contractAddress: PREPROD_CONFIG.contractAddress,
-      deploymentNetwork: 'preprod',
+      contractAddress: MIDNIGHT_PREVIEW_CONFIG.contractAddress,
+      deploymentNetwork: 'preview',
     };
     this.privateSplits = [];
     this.proofLogs = [];

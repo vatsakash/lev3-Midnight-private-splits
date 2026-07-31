@@ -1,5 +1,5 @@
 import React from 'react';
-import { Shield, Wallet, Cpu, ExternalLink, Activity, RefreshCw } from 'lucide-react';
+import { Shield, Wallet, Cpu, Rocket } from 'lucide-react';
 import { LaceWalletState } from '../midnight/types';
 
 interface NavbarProps {
@@ -8,8 +8,8 @@ interface NavbarProps {
   onDisconnect: () => void;
   onToggleLogs: () => void;
   onResetDemo: () => void;
-  activeTab: 'admin' | 'employee' | 'audit' | 'explorer';
-  setActiveTab: (tab: 'admin' | 'employee' | 'audit' | 'explorer') => void;
+  activeTab: 'deploy' | 'admin' | 'employee' | 'audit' | 'explorer';
+  setActiveTab: (tab: 'deploy' | 'admin' | 'employee' | 'audit' | 'explorer') => void;
   proofLogsCount: number;
 }
 
@@ -42,17 +42,34 @@ export const Navbar: React.FC<NavbarProps> = ({
             <div className="flex items-center gap-2">
               <h1 className="font-bold text-lg text-white tracking-tight">Private Splits</h1>
               <span className="bg-purple-900/60 text-purple-300 text-[10px] font-semibold px-2 py-0.5 rounded-full border border-purple-500/30">
-                Midnight Preprod
+                1AM Preview
               </span>
             </div>
             <p className="text-xs text-gray-400">Zero-Knowledge Confidential Payroll Engine</p>
           </div>
         </div>
 
-        {/* Navigation Tabs */}
+        {/* Navigation Tabs including /deploy */}
         <nav className="flex items-center gap-1 bg-[#131929] p-1 rounded-xl border border-gray-800">
           <button
-            onClick={() => setActiveTab('admin')}
+            onClick={() => {
+              setActiveTab('deploy');
+              window.history.pushState({}, '', '/deploy');
+            }}
+            className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all flex items-center gap-1 ${
+              activeTab === 'deploy'
+                ? 'bg-purple-600 text-white shadow-md'
+                : 'text-gray-400 hover:text-white hover:bg-gray-800/50'
+            }`}
+          >
+            <Rocket className="w-3.5 h-3.5" />
+            Deploy (/deploy)
+          </button>
+          <button
+            onClick={() => {
+              setActiveTab('admin');
+              window.history.pushState({}, '', '/admin');
+            }}
             className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
               activeTab === 'admin'
                 ? 'bg-purple-600 text-white shadow-md'
@@ -62,7 +79,10 @@ export const Navbar: React.FC<NavbarProps> = ({
             Employer Batch
           </button>
           <button
-            onClick={() => setActiveTab('employee')}
+            onClick={() => {
+              setActiveTab('employee');
+              window.history.pushState({}, '', '/employee');
+            }}
             className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
               activeTab === 'employee'
                 ? 'bg-purple-600 text-white shadow-md'
@@ -72,7 +92,10 @@ export const Navbar: React.FC<NavbarProps> = ({
             Employee Claim
           </button>
           <button
-            onClick={() => setActiveTab('audit')}
+            onClick={() => {
+              setActiveTab('audit');
+              window.history.pushState({}, '', '/audit');
+            }}
             className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
               activeTab === 'audit'
                 ? 'bg-purple-600 text-white shadow-md'
@@ -82,14 +105,17 @@ export const Navbar: React.FC<NavbarProps> = ({
             Selective Disclosure
           </button>
           <button
-            onClick={() => setActiveTab('explorer')}
+            onClick={() => {
+              setActiveTab('explorer');
+              window.history.pushState({}, '', '/explorer');
+            }}
             className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
               activeTab === 'explorer'
                 ? 'bg-purple-600 text-white shadow-md'
                 : 'text-gray-400 hover:text-white hover:bg-gray-800/50'
             }`}
           >
-            Preprod Explorer
+            Preview Explorer
           </button>
         </nav>
 
@@ -104,20 +130,12 @@ export const Navbar: React.FC<NavbarProps> = ({
             <span>Proofs ({proofLogsCount})</span>
           </button>
 
-          <button
-            onClick={onResetDemo}
-            className="p-2 rounded-xl bg-gray-800/50 hover:bg-gray-700/80 text-gray-400 hover:text-white transition"
-            title="Reset Demo Data"
-          >
-            <RefreshCw className="w-4 h-4" />
-          </button>
-
           {walletState.isConnected ? (
             <div className="flex items-center gap-2 bg-[#131929] p-1 pl-3 rounded-xl border border-purple-500/30">
               <div className="flex flex-col text-left">
                 <span className="text-[10px] text-gray-400 font-mono flex items-center gap-1">
                   <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                  Lace Connected
+                  1AM Preview Connected
                 </span>
                 <span className="text-xs font-mono text-purple-300 font-semibold">
                   {formatAddr(walletState.address!)}
@@ -136,7 +154,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               className="purple-glow-btn flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold text-white tracking-wide"
             >
               <Wallet className="w-4 h-4" />
-              Connect Lace Wallet
+              Connect 1AM Wallet
             </button>
           )}
         </div>
