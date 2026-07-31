@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { KeyRound, ShieldCheck, CheckCircle, Zap, AlertCircle, Lock, Download, ExternalLink } from 'lucide-react';
+import { KeyRound, ShieldCheck, CheckCircle, Zap, AlertCircle, Download, ArrowRight, Lock } from 'lucide-react';
 import { LedgerState, PrivateSalarySplit, LaceWalletState } from '../midnight/types';
 import { MidnightPayrollEngine } from '../midnight/payrollSimulator';
 
@@ -17,13 +17,13 @@ export const EmployeeClaim: React.FC<EmployeeClaimProps> = ({
   onRefresh,
 }) => {
   const engine = MidnightPayrollEngine.getInstance();
-  const [selectedSplitId, setSelectedSplitId] = useState<string>(privateSplits[0]?.id || '');
   const [isClaiming, setIsClaiming] = useState(false);
+  const [isFinalizing, setIsFinalizing] = useState(false);
   const [claimMessage, setClaimMessage] = useState<{ type: 'success' | 'error' | 'info'; text: string; txHash?: string } | null>(null);
 
   const handleClaim = async (splitId: string) => {
     if (!walletState.isConnected) {
-      setClaimMessage({ type: 'error', text: 'Please connect your Lace wallet to claim.' });
+      setClaimMessage({ type: 'error', text: 'Please connect your 1AM wallet to claim.' });
       return;
     }
 
@@ -42,7 +42,7 @@ export const EmployeeClaim: React.FC<EmployeeClaimProps> = ({
       const proofLog = await engine.claimPayout(splitId);
       setClaimMessage({
         type: 'success',
-        text: 'Payout claimed successfully! ZK proof verified on Midnight Preprod.',
+        text: 'Payout claimed successfully! ZK proof verified on Midnight Preview.',
         txHash: proofLog.txHash,
       });
       onRefresh();
@@ -50,6 +50,23 @@ export const EmployeeClaim: React.FC<EmployeeClaimProps> = ({
       setClaimMessage({ type: 'error', text: err.message || 'Claim failed' });
     } finally {
       setIsClaiming(false);
+    }
+  };
+
+  const handleQuickFinalize = async () => {
+    setIsFinalizing(true);
+    setClaimMessage({ type: 'info', text: 'Finalizing payroll batch on Midnight Preview...' });
+    try {
+      await engine.finalizePayroll();
+      setClaimMessage({
+        type: 'success',
+        text: 'Batch finalized! Recipient payout claims are now unlocked.',
+      });
+      onRefresh();
+    } catch (err: any) {
+      setClaimMessage({ type: 'error', text: err.message || 'Finalization failed' });
+    } finally {
+      setIsFinalizing(false);
     }
   };
 
@@ -71,6 +88,32 @@ export const EmployeeClaim: React.FC<EmployeeClaimProps> = ({
           </div>
         </div>
       </div>
+
+      {/* Batch Pending Finalization Banner */}
+      {!ledgerState.isFinalized && privateSplits.length > 0 && (
+        <div className="p-5 rounded-2xl bg-amber-950/40 border border-amber-500/40 text-amber-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <div className="p-2 bg-amber-500/20 rounded-xl text-amber-400">
+              <Lock className="w-5 h-5" />
+            </div>
+            <div>
+              <h4 className="font-bold text-sm text-white">Batch Status: Pending Finalization</h4>
+              <p className="text-xs text-amber-300/80 mt-0.5">
+                The employer must finalize the batch before employee payout claims can be executed on-chain.
+              </p>
+            </div>
+          </div>
+
+          <button
+            onClick={handleQuickFinalize}
+            disabled={isFinalizing || ledgerState.totalAllocatedAmount !== ledgerState.totalBudget}
+            className="px-4 py-2 bg-amber-500 hover:bg-amber-400 text-black font-bold text-xs rounded-xl flex items-center gap-1.5 transition disabled:opacity-40 shrink-0"
+          >
+            {isFinalizing ? 'Finalizing...' : 'Finalize Batch Now'}
+            <ArrowRight className="w-3.5 h-3.5" />
+          </button>
+        </div>
+      )}
 
       {/* Status Message */}
       {claimMessage && (
@@ -111,7 +154,7 @@ export const EmployeeClaim: React.FC<EmployeeClaimProps> = ({
             <div className="flex items-center justify-between mb-4">
               <h3 className="font-semibold text-white">Your Encrypted Entitlements</h3>
               <span className="text-xs text-gray-400 font-mono">
-                Batch Status: {ledgerState.isFinalized ? 'Finalized' : 'Pending Finalization'}
+                Batch Status: {ledgerState.isFinalized ? 'Finalized (Unlocked)' : 'Pending Finalization (Locked)'}
               </span>
             </div>
 
@@ -127,7 +170,9 @@ export const EmployeeClaim: React.FC<EmployeeClaimProps> = ({
                     className={`p-5 rounded-2xl border transition-all ${
                       split.isClaimed
                         ? 'bg-[#131929]/50 border-gray-800 opacity-80'
-                        : 'bg-[#131929] border-purple-500/30 hover:border-purple-500/60 shadow-lg shadow-purple-950/20'
+                        : ledgerState.isFinalized
+                        ? 'bg-[#131929] border-purple-500/30 hover:border-purple-500/60 shadow-lg shadow-purple-950/20'
+                        : 'bg-[#131929]/70 border-amber-500/20'
                     }`}
                   >
                     <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
@@ -138,9 +183,13 @@ export const EmployeeClaim: React.FC<EmployeeClaimProps> = ({
                             <span className="bg-emerald-950 text-emerald-300 text-[10px] px-2.5 py-0.5 rounded-full border border-emerald-500/30 font-semibold">
                               Claimed
                             </span>
-                          ) : (
+                          ) : ledgerState.isFinalized ? (
                             <span className="bg-cyan-950 text-cyan-300 text-[10px] px-2.5 py-0.5 rounded-full border border-cyan-500/30 font-semibold">
                               Ready to Claim
+                            </span>
+                          ) : (
+                            <span className="bg-amber-950 text-amber-300 text-[10px] px-2.5 py-0.5 rounded-full border border-amber-500/30 font-semibold">
+                              Pending Finalization
                             </span>
                           )}
                         </div>
@@ -153,7 +202,7 @@ export const EmployeeClaim: React.FC<EmployeeClaimProps> = ({
                         <div className="text-right">
                           <div className="text-xs text-gray-400">Salary Payout</div>
                           <div className="text-lg font-bold text-cyan-400 font-mono">
-                            {split.salaryAmount.toLocaleString()} <span className="text-xs font-normal">tDUST</span>
+                            {split.salaryAmount.toLocaleString()} <span className="text-xs font-normal">tNIGHT</span>
                           </div>
                         </div>
 
@@ -162,6 +211,7 @@ export const EmployeeClaim: React.FC<EmployeeClaimProps> = ({
                             onClick={() => handleClaim(split.id)}
                             disabled={isClaiming || !ledgerState.isFinalized}
                             className="purple-glow-btn px-4 py-2.5 rounded-xl text-xs font-bold text-white flex items-center gap-1.5 disabled:opacity-40"
+                            title={!ledgerState.isFinalized ? 'Batch must be finalized by employer first' : 'Execute ZK Claim'}
                           >
                             <Download className="w-4 h-4" />
                             {isClaiming ? 'Proving...' : 'Claim Payout'}
