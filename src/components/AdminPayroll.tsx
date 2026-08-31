@@ -129,25 +129,25 @@ export const AdminPayroll: React.FC<AdminPayrollProps> = ({
   return (
     <div className="space-y-8">
       {/* Top Banner: Privacy Guarantee */}
-      <div className="glass-panel p-6 rounded-2xl border border-purple-500/20 bg-gradient-to-r from-purple-950/30 via-[#131929] to-cyan-950/20">
+      <div className="glass-panel p-6 rounded-2xl border border-indigo-500/20 bg-gradient-to-r from-indigo-950/30 via-[#10172A] to-cyan-950/20">
         <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
           <div className="flex items-start gap-4">
-            <div className="p-3 bg-purple-500/10 rounded-xl border border-purple-500/30 text-purple-400">
+            <div className="p-3 bg-indigo-500/10 rounded-xl border border-indigo-500/30 text-indigo-400">
               <EyeOff className="w-6 h-6" />
             </div>
             <div>
               <h2 className="text-xl font-bold text-white flex items-center gap-2">
                 Employer Dashboard: Zero-Knowledge Payroll Splits
               </h2>
-              <p className="text-sm text-gray-300 max-w-2xl mt-1">
+              <p className="text-sm text-slate-300 max-w-2xl mt-1">
                 Distribute company payroll with complete privacy. On-chain observers can only verify total budget conservation. Individual employee salaries and identities are strictly encrypted off-chain.
               </p>
             </div>
           </div>
-          <div className="flex items-center gap-3 bg-[#0B0E17] px-4 py-2.5 rounded-xl border border-gray-800">
+          <div className="flex items-center gap-3 bg-[#090D16] px-4 py-2.5 rounded-xl border border-slate-800">
             <div className="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-ping"></div>
             <div className="text-xs font-mono">
-              <div className="text-gray-400">Circuit Status</div>
+              <div className="text-slate-400">Circuit Status</div>
               <div className="text-cyan-400 font-semibold">Minokawa Ready</div>
             </div>
           </div>
@@ -215,10 +215,10 @@ export const AdminPayroll: React.FC<AdminPayrollProps> = ({
         {/* Left Column: Step 1 & Step 2 Forms */}
         <div className="lg:col-span-1 space-y-6">
           {/* Form 1: Initialize Batch */}
-          <div className="glass-panel p-6 rounded-2xl border border-gray-800">
+          <div className="glass-panel p-6 rounded-2xl border border-slate-800">
             <div className="flex items-center justify-between mb-4">
               <h3 className="font-semibold text-white flex items-center gap-2">
-                <span className="w-6 h-6 rounded-full bg-purple-600 text-white text-xs flex items-center justify-center font-bold">
+                <span className="w-6 h-6 rounded-full bg-indigo-600 text-white text-xs flex items-center justify-center font-bold">
                   1
                 </span>
                 Initialize Payroll Batch
@@ -232,16 +232,16 @@ export const AdminPayroll: React.FC<AdminPayrollProps> = ({
 
             <form onSubmit={handleInitialize} className="space-y-4">
               <div>
-                <label className="block text-xs text-gray-400 mb-1">Total Payroll Budget (tNIGHT)</label>
+                <label className="block text-xs text-slate-400 mb-1">Total Payroll Budget (tNIGHT)</label>
                 <div className="relative">
-                  <DollarSign className="w-4 h-4 text-gray-500 absolute left-3 top-3" />
+                  <DollarSign className="w-4 h-4 text-slate-500 absolute left-3 top-3" />
                   <input
                     type="number"
                     value={initBudgetInput}
                     onChange={(e) => setInitBudgetInput(e.target.value)}
                     disabled={ledgerState.isFinalized}
                     placeholder="e.g. 50000"
-                    className="w-full bg-[#0B0E17] border border-gray-800 rounded-xl pl-9 pr-4 py-2 text-sm text-white focus:outline-none focus:border-purple-500"
+                    className="w-full bg-[#090D16] border border-slate-800 rounded-xl pl-9 pr-4 py-2 text-sm text-white focus:outline-none focus:border-indigo-500"
                   />
                 </div>
               </div>
@@ -264,10 +264,10 @@ export const AdminPayroll: React.FC<AdminPayrollProps> = ({
           </div>
 
           {/* Form 2: Add Private Split */}
-          <div className="glass-panel p-6 rounded-2xl border border-gray-800">
+          <div className="glass-panel p-6 rounded-2xl border border-slate-800">
             <div className="flex items-center justify-between mb-4">
               <h3 className="font-semibold text-white flex items-center gap-2">
-                <span className="w-6 h-6 rounded-full bg-purple-600 text-white text-xs flex items-center justify-center font-bold">
+                <span className="w-6 h-6 rounded-full bg-indigo-600 text-white text-xs flex items-center justify-center font-bold">
                   2
                 </span>
                 Add Private Salary Split
@@ -279,38 +279,38 @@ export const AdminPayroll: React.FC<AdminPayrollProps> = ({
 
             <form onSubmit={handleAddSplit} className="space-y-4">
               <div>
-                <label className="block text-xs text-gray-400 mb-1">Employee Name / Label</label>
+                <label className="block text-xs text-slate-400 mb-1">Employee Name / Label</label>
                 <input
                   type="text"
                   value={recipientName}
                   onChange={(e) => setRecipientName(e.target.value)}
                   disabled={ledgerState.totalBudget === 0n || ledgerState.isFinalized}
                   placeholder="e.g. Alice Vance (Lead Eng)"
-                  className="w-full bg-[#0B0E17] border border-gray-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-purple-500"
+                  className="w-full bg-[#090D16] border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500"
                 />
               </div>
 
               <div>
-                <label className="block text-xs text-gray-400 mb-1">Recipient Bech32m Address (Optional)</label>
+                <label className="block text-xs text-slate-400 mb-1">Recipient Bech32m Address (Optional)</label>
                 <input
                   type="text"
                   value={recipientAddress}
                   onChange={(e) => setRecipientAddress(e.target.value)}
                   disabled={ledgerState.totalBudget === 0n || ledgerState.isFinalized}
                   placeholder="mn_addr_test1q..."
-                  className="w-full bg-[#0B0E17] border border-gray-800 rounded-xl px-3 py-2 text-xs font-mono text-purple-300 focus:outline-none focus:border-purple-500"
+                  className="w-full bg-[#090D16] border border-slate-800 rounded-xl px-3 py-2 text-xs font-mono text-indigo-300 focus:outline-none focus:border-indigo-500"
                 />
               </div>
 
               <div>
-                <label className="block text-xs text-gray-400 mb-1">Private Salary Split (tNIGHT)</label>
+                <label className="block text-xs text-slate-400 mb-1">Private Salary Split (tNIGHT)</label>
                 <input
                   type="number"
                   value={salaryInput}
                   onChange={(e) => setSalaryInput(e.target.value)}
                   disabled={ledgerState.totalBudget === 0n || ledgerState.isFinalized}
                   placeholder="e.g. 15000"
-                  className="w-full bg-[#0B0E17] border border-gray-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-purple-500"
+                  className="w-full bg-[#090D16] border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500"
                 />
               </div>
 
@@ -335,11 +335,11 @@ export const AdminPayroll: React.FC<AdminPayrollProps> = ({
         {/* Right Column: Batch Progress, Splits Table & Finalize */}
         <div className="lg:col-span-2 space-y-6">
           {/* Progress Card */}
-          <div className="glass-panel p-6 rounded-2xl border border-gray-800">
+          <div className="glass-panel p-6 rounded-2xl border border-slate-800">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
               <div>
                 <h3 className="text-lg font-bold text-white">Batch Budget Allocation</h3>
-                <p className="text-xs text-gray-400 font-mono mt-0.5">
+                <p className="text-xs text-slate-400 font-mono mt-0.5">
                   Batch Hash: {ledgerState.batchHash.slice(0, 16)}...
                 </p>
               </div>
@@ -368,39 +368,39 @@ export const AdminPayroll: React.FC<AdminPayrollProps> = ({
 
             {/* Metrics */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
-              <div className="bg-[#0B0E17] p-3.5 rounded-xl border border-gray-800">
-                <span className="text-xs text-gray-400 block">Total Budget</span>
+              <div className="bg-[#090D16] p-3.5 rounded-xl border border-slate-800">
+                <span className="text-xs text-slate-400 block">Total Budget</span>
                 <span className="text-lg font-bold text-cyan-400 font-mono">
                   {ledgerState.totalBudget.toLocaleString()} <span className="text-xs font-normal">tNIGHT</span>
                 </span>
               </div>
-              <div className="bg-[#0B0E17] p-3.5 rounded-xl border border-gray-800">
-                <span className="text-xs text-gray-400 block">Allocated Sum</span>
-                <span className="text-lg font-bold text-purple-300 font-mono">
+              <div className="bg-[#090D16] p-3.5 rounded-xl border border-slate-800">
+                <span className="text-xs text-slate-400 block">Allocated Sum</span>
+                <span className="text-lg font-bold text-indigo-300 font-mono">
                   {ledgerState.totalAllocatedAmount.toLocaleString()} <span className="text-xs font-normal">tNIGHT</span>
                 </span>
               </div>
-              <div className="bg-[#0B0E17] p-3.5 rounded-xl border border-gray-800">
-                <span className="text-xs text-gray-400 block">Unallocated</span>
-                <span className="text-lg font-bold text-gray-300 font-mono">
+              <div className="bg-[#090D16] p-3.5 rounded-xl border border-slate-800">
+                <span className="text-xs text-slate-400 block">Unallocated</span>
+                <span className="text-lg font-bold text-slate-300 font-mono">
                   {remainingBudget.toLocaleString()} <span className="text-xs font-normal">tNIGHT</span>
                 </span>
               </div>
-              <div className="bg-[#0B0E17] p-3.5 rounded-xl border border-gray-800">
-                <span className="text-xs text-gray-400 block">Recipients</span>
+              <div className="bg-[#090D16] p-3.5 rounded-xl border border-slate-800">
+                <span className="text-xs text-slate-400 block">Recipients</span>
                 <span className="text-lg font-bold text-white font-mono">{privateSplits.length}</span>
               </div>
             </div>
 
             {/* Progress Bar */}
             <div>
-              <div className="flex justify-between text-xs text-gray-400 mb-1.5 font-mono">
+              <div className="flex justify-between text-xs text-slate-400 mb-1.5 font-mono">
                 <span>Allocation Progress</span>
                 <span>{progressPercent}% Complete</span>
               </div>
-              <div className="w-full bg-[#0B0E17] h-3 rounded-full overflow-hidden border border-gray-800">
+              <div className="w-full bg-[#090D16] h-3 rounded-full overflow-hidden border border-slate-800">
                 <div
-                  className="h-full bg-gradient-to-r from-cyan-400 via-purple-500 to-purple-600 transition-all duration-500"
+                  className="h-full bg-gradient-to-r from-cyan-400 via-indigo-500 to-indigo-600 transition-all duration-500"
                   style={{ width: `${progressPercent}%` }}
                 ></div>
               </div>
@@ -408,23 +408,23 @@ export const AdminPayroll: React.FC<AdminPayrollProps> = ({
           </div>
 
           {/* Committed Splits Table */}
-          <div className="glass-panel p-6 rounded-2xl border border-gray-800">
+          <div className="glass-panel p-6 rounded-2xl border border-slate-800">
             <div className="flex items-center justify-between mb-4">
               <h3 className="font-semibold text-white">Committed Private Salary Splits</h3>
-              <span className="text-xs text-gray-400">
+              <span className="text-xs text-slate-400">
                 On-chain view displays hashes only
               </span>
             </div>
 
             {privateSplits.length === 0 ? (
-              <div className="text-center py-12 text-gray-500 text-sm">
+              <div className="text-center py-12 text-slate-500 text-sm">
                 No salary splits committed yet. Use the form on the left to add splits.
               </div>
             ) : (
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs">
                   <thead>
-                    <tr className="border-b border-gray-800 text-gray-400 font-mono">
+                    <tr className="border-b border-slate-800 text-slate-400 font-mono">
                       <th className="pb-3">Recipient</th>
                       <th className="pb-3">On-Chain Commitment Hash</th>
                       <th className="pb-3 text-right">Amount (Private)</th>
@@ -436,11 +436,11 @@ export const AdminPayroll: React.FC<AdminPayrollProps> = ({
                       <tr key={split.id} className="hover:bg-gray-800/30 transition">
                         <td className="py-3 font-medium text-white">
                           <div>{split.recipientName}</div>
-                          <div className="text-[10px] text-gray-500 font-mono">
+                          <div className="text-[10px] text-slate-500 font-mono">
                             {split.recipientAddress.slice(0, 16)}...
                           </div>
                         </td>
-                        <td className="py-3 font-mono text-purple-400 text-[11px]">
+                        <td className="py-3 font-mono text-indigo-400 text-[11px]">
                           {split.commitment.slice(0, 20)}...
                         </td>
                         <td className="py-3 text-right font-mono text-cyan-300 font-semibold">

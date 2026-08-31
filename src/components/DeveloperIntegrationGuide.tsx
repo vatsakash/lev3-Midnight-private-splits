@@ -128,17 +128,17 @@ export const DeveloperIntegrationGuide: React.FC<DeveloperIntegrationGuideProps>
   return (
     <div className="space-y-8 max-w-5xl mx-auto">
       {/* Top Banner */}
-      <div className="glass-panel p-6 rounded-2xl border border-purple-500/30 bg-gradient-to-r from-[#131929] via-purple-950/20 to-[#131929]">
+      <div className="glass-panel p-6 rounded-2xl border border-indigo-500/30 bg-gradient-to-r from-[#10172A] via-indigo-950/20 to-[#10172A]">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div className="flex items-start gap-4">
-            <div className="p-3 bg-purple-500/10 rounded-xl border border-purple-500/30 text-purple-400">
+            <div className="p-3 bg-indigo-500/10 rounded-xl border border-indigo-500/30 text-indigo-400">
               <Terminal className="w-6 h-6" />
             </div>
             <div>
               <h2 className="text-xl font-bold text-white flex items-center gap-2">
                 Developer Integration & Environment Guide (`/integration`)
               </h2>
-              <p className="text-sm text-gray-300 mt-1">
+              <p className="text-sm text-slate-300 mt-1">
                 Real-time diagnostic test suite for 1AM wallet detection, Midnight Preview endpoints, and Compact ZK circuit constraints.
               </p>
             </div>
@@ -157,10 +157,10 @@ export const DeveloperIntegrationGuide: React.FC<DeveloperIntegrationGuideProps>
       {/* Diagnostics Cards Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Card 1: 1AM Wallet Extension Status */}
-        <div className="glass-panel p-6 rounded-2xl border border-gray-800 space-y-3">
+        <div className="glass-panel p-6 rounded-2xl border border-slate-800 space-y-3">
           <div className="flex items-center justify-between">
             <h3 className="font-semibold text-white text-sm flex items-center gap-2">
-              <Key className="w-4 h-4 text-purple-400" />
+              <Key className="w-4 h-4 text-indigo-400" />
               1AM Wallet Extension Status
             </h3>
             {walletCheck.status === 'pass' ? (
@@ -173,13 +173,13 @@ export const DeveloperIntegrationGuide: React.FC<DeveloperIntegrationGuideProps>
               </span>
             )}
           </div>
-          <p className="text-xs text-gray-300 font-mono bg-[#0B0E17] p-3 rounded-xl border border-gray-800">
+          <p className="text-xs text-slate-300 font-mono bg-[#090D16] p-3 rounded-xl border border-slate-800">
             {walletCheck.message}
           </p>
         </div>
 
         {/* Card 2: Indexer Endpoint Status */}
-        <div className="glass-panel p-6 rounded-2xl border border-gray-800 space-y-3">
+        <div className="glass-panel p-6 rounded-2xl border border-slate-800 space-y-3">
           <div className="flex items-center justify-between">
             <h3 className="font-semibold text-white text-sm flex items-center gap-2">
               <Database className="w-4 h-4 text-cyan-400" />
@@ -195,13 +195,13 @@ export const DeveloperIntegrationGuide: React.FC<DeveloperIntegrationGuideProps>
               </span>
             )}
           </div>
-          <p className="text-xs text-gray-300 font-mono bg-[#0B0E17] p-3 rounded-xl border border-gray-800">
+          <p className="text-xs text-slate-300 font-mono bg-[#090D16] p-3 rounded-xl border border-slate-800">
             {indexerCheck.message}
           </p>
         </div>
 
         {/* Card 3: Node RPC Endpoint Status */}
-        <div className="glass-panel p-6 rounded-2xl border border-gray-800 space-y-3">
+        <div className="glass-panel p-6 rounded-2xl border border-slate-800 space-y-3">
           <div className="flex items-center justify-between">
             <h3 className="font-semibold text-white text-sm flex items-center gap-2">
               <Network className="w-4 h-4 text-cyan-400" />
@@ -217,16 +217,16 @@ export const DeveloperIntegrationGuide: React.FC<DeveloperIntegrationGuideProps>
               </span>
             )}
           </div>
-          <p className="text-xs text-gray-300 font-mono bg-[#0B0E17] p-3 rounded-xl border border-gray-800">
+          <p className="text-xs text-slate-300 font-mono bg-[#090D16] p-3 rounded-xl border border-slate-800">
             {rpcCheck.message}
           </p>
         </div>
 
         {/* Card 4: Compact Circuit Invariants */}
-        <div className="glass-panel p-6 rounded-2xl border border-gray-800 space-y-3">
+        <div className="glass-panel p-6 rounded-2xl border border-slate-800 space-y-3">
           <div className="flex items-center justify-between">
             <h3 className="font-semibold text-white text-sm flex items-center gap-2">
-              <Cpu className="w-4 h-4 text-purple-400" />
+              <Cpu className="w-4 h-4 text-indigo-400" />
               Compact Circuit Invariants
             </h3>
             {circuitCheck.status === 'pass' ? (
@@ -239,20 +239,20 @@ export const DeveloperIntegrationGuide: React.FC<DeveloperIntegrationGuideProps>
               </span>
             )}
           </div>
-          <p className="text-xs text-gray-300 font-mono bg-[#0B0E17] p-3 rounded-xl border border-gray-800">
+          <p className="text-xs text-slate-300 font-mono bg-[#090D16] p-3 rounded-xl border border-slate-800">
             {circuitCheck.message}
           </p>
         </div>
       </div>
 
       {/* Live Diagnostic Console */}
-      <div className="glass-panel p-6 rounded-2xl border border-gray-800 space-y-4">
+      <div className="glass-panel p-6 rounded-2xl border border-slate-800 space-y-4">
         <div className="flex items-center justify-between">
           <h3 className="font-semibold text-white text-sm flex items-center gap-2 font-mono">
             <Code className="w-4 h-4 text-cyan-400" />
             Diagnostic Output Log
           </h3>
-          <span className="text-[10px] text-gray-500 font-mono">
+          <span className="text-[10px] text-slate-500 font-mono">
             {diagnosticLogs.length} events logged
           </span>
         </div>

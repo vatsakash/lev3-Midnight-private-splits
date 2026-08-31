@@ -73,7 +73,7 @@ export const EmployeeClaim: React.FC<EmployeeClaimProps> = ({
   return (
     <div className="space-y-8">
       {/* Header Banner */}
-      <div className="glass-panel p-6 rounded-2xl border border-cyan-500/20 bg-gradient-to-r from-[#131929] via-cyan-950/20 to-[#131929]">
+      <div className="glass-panel p-6 rounded-2xl border border-cyan-500/20 bg-gradient-to-r from-[#10172A] via-cyan-950/20 to-[#10172A]">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div className="flex items-start gap-4">
             <div className="p-3 bg-cyan-500/10 rounded-xl border border-cyan-500/30 text-cyan-400">
@@ -81,7 +81,7 @@ export const EmployeeClaim: React.FC<EmployeeClaimProps> = ({
             </div>
             <div>
               <h2 className="text-xl font-bold text-white">Employee Payout Portal</h2>
-              <p className="text-sm text-gray-300 mt-1">
+              <p className="text-sm text-slate-300 mt-1">
                 Claim your private salary split using your zero-knowledge entitlement proof. No one else can trace your payout amount or link your wallet address to other employees.
               </p>
             </div>
@@ -138,7 +138,7 @@ export const EmployeeClaim: React.FC<EmployeeClaimProps> = ({
             </button>
           </div>
           {claimMessage.txHash && (
-            <div className="text-xs font-mono bg-[#0B0E17] p-2 rounded border border-emerald-800/40 text-emerald-400 flex items-center justify-between">
+            <div className="text-xs font-mono bg-[#090D16] p-2 rounded border border-emerald-800/40 text-emerald-400 flex items-center justify-between">
               <span>On-Chain Tx Hash: {claimMessage.txHash}</span>
               <span className="text-[10px] bg-emerald-900/60 text-emerald-300 px-2 py-0.5 rounded">Verified</span>
             </div>
@@ -150,16 +150,16 @@ export const EmployeeClaim: React.FC<EmployeeClaimProps> = ({
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Left: Available Claims */}
         <div className="lg:col-span-2 space-y-4">
-          <div className="glass-panel p-6 rounded-2xl border border-gray-800">
+          <div className="glass-panel p-6 rounded-2xl border border-slate-800">
             <div className="flex items-center justify-between mb-4">
               <h3 className="font-semibold text-white">Your Encrypted Entitlements</h3>
-              <span className="text-xs text-gray-400 font-mono">
+              <span className="text-xs text-slate-400 font-mono">
                 Batch Status: {ledgerState.isFinalized ? 'Finalized (Unlocked)' : 'Pending Finalization (Locked)'}
               </span>
             </div>
 
             {privateSplits.length === 0 ? (
-              <div className="text-center py-12 text-gray-500 text-sm">
+              <div className="text-center py-12 text-slate-500 text-sm">
                 No salary splits available in current batch. Employer must initialize and commit splits first.
               </div>
             ) : (
@@ -169,10 +169,10 @@ export const EmployeeClaim: React.FC<EmployeeClaimProps> = ({
                     key={split.id}
                     className={`p-5 rounded-2xl border transition-all ${
                       split.isClaimed
-                        ? 'bg-[#131929]/50 border-gray-800 opacity-80'
+                        ? 'bg-[#10172A]/50 border-slate-800 opacity-80'
                         : ledgerState.isFinalized
-                        ? 'bg-[#131929] border-purple-500/30 hover:border-purple-500/60 shadow-lg shadow-purple-950/20'
-                        : 'bg-[#131929]/70 border-amber-500/20'
+                        ? 'bg-[#10172A] border-indigo-500/30 hover:border-indigo-500/60 shadow-lg shadow-indigo-950/20'
+                        : 'bg-[#10172A]/70 border-amber-500/20'
                     }`}
                   >
                     <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
@@ -193,14 +193,14 @@ export const EmployeeClaim: React.FC<EmployeeClaimProps> = ({
                             </span>
                           )}
                         </div>
-                        <p className="text-xs text-gray-400 font-mono mt-1">
+                        <p className="text-xs text-slate-400 font-mono mt-1">
                           Commitment: {split.commitment.slice(0, 24)}...
                         </p>
                       </div>
 
                       <div className="flex items-center gap-4">
                         <div className="text-right">
-                          <div className="text-xs text-gray-400">Salary Payout</div>
+                          <div className="text-xs text-slate-400">Salary Payout</div>
                           <div className="text-lg font-bold text-cyan-400 font-mono">
                             {split.salaryAmount.toLocaleString()} <span className="text-xs font-normal">tNIGHT</span>
                           </div>
@@ -221,7 +221,7 @@ export const EmployeeClaim: React.FC<EmployeeClaimProps> = ({
                     </div>
 
                     {split.isClaimed && split.claimedTxHash && (
-                      <div className="mt-3 pt-3 border-t border-gray-800 text-xs font-mono text-gray-400 flex items-center justify-between">
+                      <div className="mt-3 pt-3 border-t border-slate-800 text-xs font-mono text-slate-400 flex items-center justify-between">
                         <span>Nullifier Verified</span>
                         <span className="text-emerald-400">{split.claimedTxHash.slice(0, 20)}...</span>
                       </div>
@@ -235,17 +235,17 @@ export const EmployeeClaim: React.FC<EmployeeClaimProps> = ({
 
         {/* Right: ZK Proof Explanation */}
         <div className="lg:col-span-1 space-y-6">
-          <div className="glass-panel p-6 rounded-2xl border border-gray-800 space-y-4">
+          <div className="glass-panel p-6 rounded-2xl border border-slate-800 space-y-4">
             <h3 className="font-semibold text-white flex items-center gap-2">
               <ShieldCheck className="w-5 h-5 text-cyan-400" />
               Privacy Assurance
             </h3>
 
-            <div className="space-y-3 text-xs text-gray-300 leading-relaxed">
+            <div className="space-y-3 text-xs text-slate-300 leading-relaxed">
               <p>
                 When you click <strong className="text-cyan-300">Claim Payout</strong>, your browser executes a local Midnight zero-knowledge circuit (`claim_payout`).
               </p>
-              <div className="p-3 bg-[#0B0E17] rounded-xl border border-gray-800 font-mono text-[11px] text-purple-300 space-y-1">
+              <div className="p-3 bg-[#090D16] rounded-xl border border-slate-800 font-mono text-[11px] text-indigo-300 space-y-1">
                 <div>Public Input: Commitment Hash</div>
                 <div>Witness: Private Secret Key</div>
                 <div>Output: Valid Claim Proof</div>

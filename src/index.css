@@ -4,9 +4,9 @@
 
 @layer base {
   body {
-    font-family: 'Inter', sans-serif;
-    background-color: #0B0E17;
-    color: #F3F4F6;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background-color: #090D16;
+    color: #F8FAFC;
     overflow-x: hidden;
   }
 
@@ -15,56 +15,56 @@
   }
 }
 
-/* Custom Glassmorphism Styles */
+/* Custom Glassmorphism & Electric Indigo/Cyan Palette */
 .glass-panel {
-  background: rgba(19, 25, 41, 0.7);
+  background: rgba(16, 23, 42, 0.75);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .glass-panel-interactive {
-  background: rgba(19, 25, 41, 0.7);
+  background: rgba(16, 23, 42, 0.75);
   backdrop-filter: blur(16px);
   border: 1px solid rgba(255, 255, 255, 0.08);
   transition: all 0.2s ease-in-out;
 }
 
 .glass-panel-interactive:hover {
-  border-color: rgba(199, 125, 255, 0.3);
-  box-shadow: 0 8px 32px 0 rgba(123, 44, 191, 0.15);
+  border-color: rgba(99, 102, 241, 0.4);
+  box-shadow: 0 8px 32px 0 rgba(99, 102, 241, 0.25);
   transform: translateY(-2px);
 }
 
 .purple-gradient-text {
-  background: linear-gradient(135deg, #00F5D4 0%, #C77DFF 50%, #9D4EDD 100%);
+  background: linear-gradient(135deg, #22D3EE 0%, #818CF8 50%, #6366F1 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
 .purple-glow-btn {
-  background: linear-gradient(135deg, #7B2CBF 0%, #9D4EDD 100%);
-  box-shadow: 0 4px 20px rgba(123, 44, 191, 0.4);
+  background: linear-gradient(135deg, #4F46E5 0%, #6366F1 100%);
+  box-shadow: 0 4px 20px rgba(99, 102, 241, 0.45);
   transition: all 0.2s ease-in-out;
 }
 
 .purple-glow-btn:hover {
-  box-shadow: 0 6px 28px rgba(157, 78, 221, 0.6);
+  box-shadow: 0 6px 28px rgba(99, 102, 241, 0.65);
   transform: translateY(-1px);
 }
 
 .glow-border {
-  border: 1px solid rgba(0, 245, 212, 0.3);
-  box-shadow: 0 0 15px rgba(0, 245, 212, 0.15);
+  border: 1px solid rgba(6, 182, 212, 0.4);
+  box-shadow: 0 0 15px rgba(6, 182, 212, 0.25);
 }
 
 /* Pulse animation for privacy status */
 @keyframes shieldPulse {
   0%, 100% {
-    box-shadow: 0 0 10px rgba(0, 245, 212, 0.2);
+    box-shadow: 0 0 10px rgba(6, 182, 212, 0.2);
   }
   50% {
-    box-shadow: 0 0 25px rgba(0, 245, 212, 0.5);
+    box-shadow: 0 0 25px rgba(6, 182, 212, 0.6);
   }
 }
 
@@ -78,12 +78,12 @@
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #0B0E17;
+  background: #090D16;
 }
 ::-webkit-scrollbar-thumb {
-  background: #2A3654;
+  background: #253256;
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #7B2CBF;
+  background: #6366F1;
 }

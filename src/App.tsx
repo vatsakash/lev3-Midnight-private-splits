@@ -74,7 +74,7 @@ export function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0B0E17] text-gray-100 flex flex-col selection:bg-purple-500 selection:text-white">
+    <div className="min-h-screen bg-[#090D16] text-gray-100 flex flex-col selection:bg-indigo-500 selection:text-white">
       {/* Navigation Header */}
       <Navbar
         walletState={walletState}
@@ -129,10 +129,10 @@ export function App() {
       </main>
 
       {/* Footer */}
-      <footer className="w-full glass-panel border-t border-gray-800/80 py-6 px-4 lg:px-8 mt-12">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-400">
+      <footer className="w-full glass-panel border-t border-slate-800/80 py-6 px-4 lg:px-8 mt-12">
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400">
           <div>
-            Built with <span className="text-purple-400">1AM &amp; Midnight Network</span> — Compact Minokawa Circuits
+            Built with <span className="text-indigo-400">1AM &amp; Midnight Network</span> — Compact Minokawa Circuits
           </div>
           <div className="flex items-center gap-4 font-mono text-[11px]">
             <span>1AM Preview Deployment</span>

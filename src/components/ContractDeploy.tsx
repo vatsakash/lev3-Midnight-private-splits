@@ -75,35 +75,35 @@ export const ContractDeploy: React.FC<ContractDeployProps> = ({
   return (
     <div className="space-y-8 max-w-4xl mx-auto">
       {/* Header Banner */}
-      <div className="glass-panel p-6 rounded-2xl border border-purple-500/30 bg-gradient-to-r from-[#131929] via-purple-950/20 to-[#131929]">
+      <div className="glass-panel p-6 rounded-2xl border border-indigo-500/30 bg-gradient-to-r from-[#10172A] via-indigo-950/20 to-[#10172A]">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div className="flex items-start gap-4">
-            <div className="p-3 bg-purple-500/10 rounded-xl border border-purple-500/30 text-purple-400">
+            <div className="p-3 bg-indigo-500/10 rounded-xl border border-indigo-500/30 text-indigo-400">
               <Rocket className="w-6 h-6" />
             </div>
             <div>
               <h2 className="text-xl font-bold text-white flex items-center gap-2">
                 1AM Extension Browser Contract Deployment (`/deploy`)
               </h2>
-              <p className="text-sm text-gray-300 mt-1">
+              <p className="text-sm text-slate-300 mt-1">
                 Deploy the Compact Private Payroll smart contract directly from your browser via the 1AM wallet extension on Midnight Preview.
               </p>
             </div>
           </div>
 
-          <div className="flex items-center gap-2 bg-purple-950/80 text-purple-300 px-3.5 py-1.5 rounded-xl border border-purple-500/40 text-xs font-mono">
-            <span className="w-2 h-2 rounded-full bg-purple-400 animate-pulse"></span>
+          <div className="flex items-center gap-2 bg-indigo-950/80 text-indigo-300 px-3.5 py-1.5 rounded-xl border border-indigo-500/40 text-xs font-mono">
+            <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
             1AM Preview Mode
           </div>
         </div>
       </div>
 
       {/* Deployment Form Card */}
-      <div className="glass-panel p-6 rounded-2xl border border-gray-800 space-y-6">
-        <div className="flex items-center justify-between border-b border-gray-800 pb-4">
+      <div className="glass-panel p-6 rounded-2xl border border-slate-800 space-y-6">
+        <div className="flex items-center justify-between border-b border-slate-800 pb-4">
           <div>
             <h3 className="font-semibold text-white text-base">Deploy Compact Smart Contract</h3>
-            <p className="text-xs text-gray-400 font-mono mt-0.5">
+            <p className="text-xs text-slate-400 font-mono mt-0.5">
               Network: Midnight Preview (`preview`) | Engine: 1AM Browser Prover
             </p>
           </div>
@@ -116,7 +116,7 @@ export const ContractDeploy: React.FC<ContractDeployProps> = ({
 
         <form onSubmit={handleBrowserDeploy} className="space-y-4">
           <div>
-            <label className="block text-xs text-gray-400 mb-1">
+            <label className="block text-xs text-slate-400 mb-1">
               Initial Batch Budget Allocation (tNIGHT)
             </label>
             <input
@@ -124,7 +124,7 @@ export const ContractDeploy: React.FC<ContractDeployProps> = ({
               value={initialBudgetInput}
               onChange={(e) => setInitialBudgetInput(e.target.value)}
               disabled={isDeploying}
-              className="w-full bg-[#0B0E17] border border-gray-800 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-purple-500 font-mono"
+              className="w-full bg-[#090D16] border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500 font-mono"
             />
           </div>
 
@@ -159,7 +159,7 @@ export const ContractDeploy: React.FC<ContractDeployProps> = ({
         </form>
       </div>
 
-      {/* Deployment Success Display (Must NEVER be hidden after success) */}
+      {/* Deployment Success Display */}
       {deployResult && (
         <div className="glass-panel p-6 rounded-2xl border border-emerald-500/40 bg-emerald-950/10 space-y-4 animate-fadeIn">
           <div className="flex items-center justify-between border-b border-emerald-800/40 pb-3">
@@ -174,8 +174,8 @@ export const ContractDeploy: React.FC<ContractDeployProps> = ({
 
           <div className="space-y-3 font-mono text-xs">
             {/* Deployed Contract Address */}
-            <div className="bg-[#0B0E17] p-4 rounded-xl border border-emerald-800/40 space-y-2">
-              <div className="text-gray-400 text-[10px] flex items-center justify-between">
+            <div className="bg-[#090D16] p-4 rounded-xl border border-emerald-800/40 space-y-2">
+              <div className="text-slate-400 text-[10px] flex items-center justify-between">
                 <span>DEPLOYED BECH32M CONTRACT ADDRESS</span>
                 <button
                   onClick={() => copyToClipboard(deployResult.contractAddress)}
@@ -190,9 +190,9 @@ export const ContractDeploy: React.FC<ContractDeployProps> = ({
               </div>
 
               {/* Original Contract Hex Address */}
-              <div className="pt-2 border-t border-gray-800">
-                <span className="text-gray-500 text-[10px] block">ORIGINAL CONTRACT HEX ADDRESS</span>
-                <span className="text-purple-300 font-bold break-all text-xs font-mono">
+              <div className="pt-2 border-t border-slate-800">
+                <span className="text-slate-500 text-[10px] block">ORIGINAL CONTRACT HEX ADDRESS</span>
+                <span className="text-indigo-300 font-bold break-all text-xs font-mono">
                   {MIDNIGHT_PREVIEW_CONFIG.originalContractHexAddress}
                 </span>
               </div>
@@ -200,13 +200,13 @@ export const ContractDeploy: React.FC<ContractDeployProps> = ({
 
             {/* Deployment Details */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-[11px]">
-              <div className="bg-[#0B0E17] p-3 rounded-xl border border-gray-800">
-                <span className="text-gray-500 block text-[10px]">TRANSACTION HASH</span>
-                <span className="text-purple-300 truncate block">{deployResult.txHash}</span>
+              <div className="bg-[#090D16] p-3 rounded-xl border border-slate-800">
+                <span className="text-slate-500 block text-[10px]">TRANSACTION HASH</span>
+                <span className="text-indigo-300 truncate block">{deployResult.txHash}</span>
               </div>
-              <div className="bg-[#0B0E17] p-3 rounded-xl border border-gray-800">
-                <span className="text-gray-500 block text-[10px]">DEPLOYER ADDRESS</span>
-                <span className="text-gray-300 truncate block">{deployResult.deployerAddress}</span>
+              <div className="bg-[#090D16] p-3 rounded-xl border border-slate-800">
+                <span className="text-slate-500 block text-[10px]">DEPLOYER ADDRESS</span>
+                <span className="text-slate-300 truncate block">{deployResult.deployerAddress}</span>
               </div>
             </div>
           </div>
