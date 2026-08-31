@@ -38,9 +38,10 @@ This application deploys smart contracts **100% through the 1AM / Lace browser w
 
 ### Deployed Preprod Network Endpoints
 - **Network ID**: `preprod`
-- **Deployed Contract Address**: `mn_contract_preprod1q0b25eecb7a0d69b70f20e79c9213c06e45aad14cd3db6888a59fd052a78b58b0`
+- **Deployed Contract Address**: `0b25eecb7a0d69b70f20e79c9213c06e45aad14cd3db6888a59fd052a78b58b0`
 - **Indexer Endpoint**: `https://indexer.preprod.midnight.network/api/v4/graphql`
 - **Node RPC**: `https://rpc.preprod.midnight.network`
+- **TRANSACTION HASH**: `0x2c84db5bafea9f5064c41078e65912dbfe542fbb6872dd2ddba865d2063a5588`
 
 ---
 
