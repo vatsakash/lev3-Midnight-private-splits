@@ -147,7 +147,7 @@ Standard public blockchains (Ethereum, Solana, Cardano) publish all transaction 
 ---
 
 ## Roadmap & Preprod Deployment
-- **Preprod Smart Contract Address**: `mn_contract_preprod1q0b25eecb7a0d69b70f20e79c9213c06e45aad14cd3db6888a59fd052a78b58b0`
+- **Preprod Smart Contract Address**: `0b25eecb7a0d69b70f20e79c9213c06e45aad14cd3db6888a59fd052a78b58b0`
 - **GraphQL Indexer**: `https://indexer.preprod.midnight.network/api/v4/graphql`
 - **Node RPC**: `https://rpc.preprod.midnight.network`
 - **Phase 1 (Complete)**: Compact contract, 1AM wallet connector, ZK simulator, full UI, Vitest suite, and GitHub CI/CD on Preprod network.
