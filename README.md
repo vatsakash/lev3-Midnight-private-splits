@@ -45,17 +45,17 @@
 ## 🏛️ System Architecture
 
 ```mermaid
-graph TD
-    Employer[Employer / DAO Admin] -->|1. Connect 1AM Wallet| Extension[1AM Extension Prover]
-    Employer -->|2. Deploy Contract| DeployUI[Deploy Page /deploy]
-    DeployUI -->|3. Generate ZK Proof & Deploy| MidnightBC[Midnight Preprod Blockchain]
+flowchart TD
+    Employer["Employer / DAO Admin"] -->|"1. Connect 1AM Wallet"| Extension["1AM Extension Prover"]
+    Employer -->|"2. Deploy Contract"| DeployUI["Deploy Page (/deploy)"]
+    DeployUI -->|"3. Generate ZK Proof & Deploy"| MidnightBC["Midnight Preprod Blockchain"]
     
-    Employer -->|4. Commit Private Salary Splits| ZKCircuit[Compact ZK Circuit]
-    ZKCircuit -->|5. Verify sum(splits) == total_budget| Ledger[Public Ledger State]
-    ZKCircuit -->|6. Encrypted Commitments| LocalState[Client Private State]
+    Employer -->|"4. Commit Private Salary Splits"| ZKCircuit["Compact ZK Circuit"]
+    ZKCircuit -->|"5. Verify sum of splits equals total budget"| Ledger["Public Ledger State"]
+    ZKCircuit -->|"6. Encrypted Commitments"| LocalState["Client Private State"]
     
-    Employee[Employee / Contractor] -->|7. Prove Witness Key| ClaimPortal[Employee Claim Portal]
-    ClaimPortal -->|8. Claim Shielded Payout| EmployeeWallet[1AM Wallet Extension]
+    Employee["Employee / Contractor"] -->|"7. Prove Witness Key"| ClaimPortal["Employee Claim Portal"]
+    ClaimPortal -->|"8. Claim Shielded Payout"| EmployeeWallet["1AM Wallet Extension"]
 ```
 
 ---
