@@ -212,14 +212,18 @@ export class MidnightCircuitClient {
 
     const newSplit: PrivateSalarySplit = {
       id: `split-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
+      recipientName: employeeName,
       employeeName,
+      recipientAddress: bech32Address,
       bech32Address,
       salaryAmount,
-      employeeCommitment,
-      commitment: employeeCommitment,
+      employeeSecret: secretKey,
       secretWitnessKey: secretKey,
+      commitment: employeeCommitment,
+      employeeCommitment,
       isClaimed: false,
       timestamp: new Date().toISOString(),
+      createdAt: Date.now(),
     };
 
     this.privateSplits.push(newSplit);
@@ -288,8 +292,10 @@ export class MidnightCircuitClient {
       (s) =>
         s.id === keyOrId ||
         (s.secretWitnessKey && s.secretWitnessKey.toLowerCase() === keyOrId.toLowerCase()) ||
+        (s.employeeSecret && s.employeeSecret.toLowerCase() === keyOrId.toLowerCase()) ||
+        (s.commitment && s.commitment.toLowerCase() === keyOrId.toLowerCase()) ||
         (s.employeeCommitment && s.employeeCommitment.toLowerCase() === keyOrId.toLowerCase()) ||
-        (employeeCommitment && s.employeeCommitment && s.employeeCommitment.toLowerCase() === employeeCommitment.toLowerCase())
+        (employeeCommitment && s.commitment && s.commitment.toLowerCase() === employeeCommitment.toLowerCase())
     );
 
     if (splitIndex === -1) {
@@ -314,7 +320,7 @@ export class MidnightCircuitClient {
       circuitName: 'claim_payout',
       status: 'proven',
       publicInputs: {
-        nullifierHash: '0xnullifier_' + targetSplit.employeeCommitment.slice(2, 12),
+        nullifierHash: '0xnullifier_' + targetSplit.commitment.slice(2, 12),
         contractAddress: this.ledgerState.contractAddress,
       },
       privateWitnessCount: 2,
@@ -342,12 +348,14 @@ export class MidnightCircuitClient {
       totalBudgetVerified: isSumValid,
       sumEqualsBudget: isSumValid,
       publicTotalBudget: this.ledgerState.totalBudget,
+      totalAllocated: this.ledgerState.totalAllocatedAmount,
       verifiedRecipientsCount: this.ledgerState.allocatedCount,
       recipientCount: this.ledgerState.allocatedCount,
-      individualSalariesExposed: false,
+      individualSalariesExposed: false as const,
       complianceStatus: isSumValid ? 'AUDIT_PASSED' : 'AUDIT_FAILED',
       verifierHash: '0xaudit_verifier_' + Array.from({ length: 16 }, () => Math.floor(Math.random() * 16).toString(16)).join(''),
       disclosedByAuditKey: auditKey,
+      auditKey,
       timestamp: new Date().toISOString(),
       txHash,
     };
@@ -402,11 +410,20 @@ export class MidnightCircuitClient {
     }
   }
 
-  private addProofLog(log: Omit<ZkProofLog, 'id' | 'timestamp'>): ZkProofLog {
+  private addProofLog(
+    log: Partial<ZkProofLog> & { circuitName: ZkProofLog['circuitName']; status: ZkProofLog['status'] }
+  ): ZkProofLog {
     const newLog: ZkProofLog = {
-      ...log,
       id: `proof-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
+      circuitName: log.circuitName,
       timestamp: new Date().toISOString(),
+      provingTimeMs: log.provingTimeMs || Math.floor(Math.random() * 400) + 200,
+      publicInputs: log.publicInputs || {},
+      privateInputsRedacted: log.privateInputsRedacted || ['secretWitnessKey', 'salaryAmountHash'],
+      proofHash: log.proofHash || '0xproof_' + Array.from({ length: 32 }, () => Math.floor(Math.random() * 16).toString(16)).join(''),
+      status: log.status,
+      txHash: log.txHash,
+      privateWitnessCount: log.privateWitnessCount || 2,
     };
     this.proofLogs.unshift(newLog);
     if (this.proofLogs.length > 30) {

@@ -13,13 +13,18 @@ export interface LedgerState {
 export interface PrivateSalarySplit {
   id: string;
   recipientName: string;
+  employeeName?: string;
   recipientAddress: string;
+  bech32Address?: string;
   salaryAmount: bigint;
   employeeSecret: string;
+  secretWitnessKey?: string;
   commitment: string;
+  employeeCommitment?: string;
   isClaimed: boolean;
   claimedTxHash?: string;
   createdAt: number;
+  timestamp?: string;
 }
 
 export interface ZkProofLog {
@@ -32,6 +37,7 @@ export interface ZkProofLog {
   proofHash: string;
   status: 'proven' | 'verified' | 'failed';
   txHash?: string;
+  privateWitnessCount?: number;
 }
 
 export interface LaceWalletState {
@@ -52,6 +58,12 @@ export interface SelectiveDisclosureReport {
   individualSalariesExposed: false; // Always false to prove privacy!
   verifierHash: string;
   auditKey: string;
+  isTotalBudgetValid?: boolean;
+  publicTotalBudget?: bigint;
+  verifiedRecipientsCount?: number;
+  complianceStatus?: string;
+  disclosedByAuditKey?: string;
+  txHash?: string;
 }
 
 export interface ContractDeployResult {
