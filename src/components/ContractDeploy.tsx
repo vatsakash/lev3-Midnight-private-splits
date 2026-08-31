@@ -198,7 +198,7 @@ export const ContractDeploy: React.FC<ContractDeployProps> = ({
               </div>
             </div>
 
-            {/* Deployment Details */}
+            {/* Deployment Details & Explorer Link */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-[11px]">
               <div className="bg-[#090D16] p-3 rounded-xl border border-slate-800">
                 <span className="text-slate-500 block text-[10px]">TRANSACTION HASH</span>
@@ -208,6 +208,18 @@ export const ContractDeploy: React.FC<ContractDeployProps> = ({
                 <span className="text-slate-500 block text-[10px]">DEPLOYER ADDRESS</span>
                 <span className="text-slate-300 truncate block">{deployResult.deployerAddress}</span>
               </div>
+            </div>
+
+            <div className="pt-2 flex justify-end">
+              <a
+                href="https://preprod.midnightexplorer.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-indigo-950/60 hover:bg-indigo-900/80 text-indigo-300 rounded-xl text-xs font-mono border border-indigo-500/30 transition shadow-sm"
+              >
+                <ExternalLink className="w-3.5 h-3.5 text-cyan-400" />
+                <span>Verify on Midnight Preprod Explorer ↗</span>
+              </a>
             </div>
           </div>
         </div>

@@ -60,6 +60,16 @@ export const PreprodExplorer: React.FC<PreprodExplorerProps> = ({ ledgerState })
               <span className="text-slate-400">Compiler:</span>
               <span className="text-cyan-400 font-semibold">Compact v0.23 / Minokawa</span>
             </div>
+            <div className="pt-2">
+              <a
+                href="https://preprod.midnightexplorer.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-cyan-950/60 hover:bg-cyan-900/80 text-cyan-300 rounded-lg text-xs font-mono border border-cyan-500/30 transition"
+              >
+                <span>Open Midnight Preprod Explorer ↗</span>
+              </a>
+            </div>
           </div>
         </div>
 
