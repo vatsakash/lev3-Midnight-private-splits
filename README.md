@@ -1,6 +1,6 @@
 # Private Payroll / Splits — Midnight Network (1AM Preview Deployment)
 
-[![CI/CD Pipeline](https://github.com/rahul7686/Private-Splits/actions/workflows/ci.yml/badge.svg)](https://github.com/rahul7686/Private-Splits/actions/workflows/ci.yml)
+[![CI/CD Pipeline](https://github.com/vatsakash/lev3-Midnight-private-splits/actions/workflows/ci.yml/badge.svg)](https://github.com/vatsakash/lev3-Midnight-private-splits/actions/workflows/ci.yml)
 ![Midnight Preview](https://img.shields.io/badge/Midnight-Preview%20Network-7B2CBF)
 ![1AM Extension](https://img.shields.io/badge/Deploy-1AM%20Browser%20Extension-00F5D4)
 ![Vitest](https://img.shields.io/badge/Tests-4%20Passing-emerald)
@@ -67,8 +67,8 @@ Configure your 1AM or Lace browser extension wallet for **Midnight Preview** net
 
 ### 2. Run Local Application
 ```bash
-git clone https://github.com/rahul7686/Private-Splits.git
-cd Private-Splits
+git clone https://github.com/vatsakash/lev3-Midnight-private-splits.git
+cd lev3-Midnight-private-splits
 npm install
 npm run dev
 ```

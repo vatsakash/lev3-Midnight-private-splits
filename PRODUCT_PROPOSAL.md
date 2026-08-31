@@ -5,7 +5,7 @@
 
 - 🌐 **Live Deployed App**: [private-splits.vercel.app](https://private-splits.vercel.app)
 - 🎥 **Demo Video Walkthrough**: [Watch Video Demo on Google Drive](https://drive.google.com/file/d/1EtDqa7OfEIXpTFXmZ51Ci7fefmtJVmuZ/view?usp=sharing)
-- 💻 **GitHub Repository**: [github.com/rahul7686/Private-Splits](https://github.com/rahul7686/Private-Splits)
+- 💻 **GitHub Repository**: [github.com/vatsakash/lev3-Midnight-private-splits](https://github.com/vatsakash/lev3-Midnight-private-splits)
 
 ### 📸 Application & Deployment Screenshots
 ![1AM Extension Browser Contract Deployment](docs/screenshots/browser_deploy_desktop.png)
