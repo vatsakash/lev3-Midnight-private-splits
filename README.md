@@ -12,7 +12,7 @@
 ## 🔗 Quick Links & Demo
 
 - 🌐 **Live Deployed App**: [lev3-midnight-private-splits.vercel.app](https://lev3-midnight-private-splits.vercel.app/)
-- 🎥 **Demo Video Walkthrough**: [Watch Video Demo on Google Drive](https://drive.google.com/file/d/1EtDqa7OfEIXpTFXmZ51Ci7fefmtJVmuZ/view?usp=sharing)
+- 🎥 **Demo Video Walkthrough**: [Watch Video Demo on Google Drive](https://drive.google.com/file/d/1tNRzXDj9ZfjGCkL7-EgZPqYm-2ZupTN7/view?usp=sharing)
 
 ### 📸 Application & Deployment Screenshots
 
