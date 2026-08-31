@@ -105,7 +105,7 @@ export const AdminPayroll: React.FC<AdminPayrollProps> = ({
 
   const handleFinalizeBatch = async () => {
     setIsFinalizing(true);
-    setStatusMessage({ type: 'info', text: 'Executing finalize_payroll circuit on Midnight Preview...' });
+    setStatusMessage({ type: 'info', text: 'Executing finalize_payroll circuit on Midnight Preprod...' });
 
     try {
       await engine.finalizePayroll();
@@ -187,7 +187,7 @@ export const AdminPayroll: React.FC<AdminPayrollProps> = ({
             <div>
               <h4 className="font-bold text-sm text-white">Payroll Batch Locked & Finalized On-Chain!</h4>
               <p className="text-xs text-emerald-300/80 mt-1">
-                The ZK salary split commitments are now locked on Midnight Preview. Here is what you can do next:
+                The ZK salary split commitments are now locked on Midnight Preprod. Here is what you can do next:
               </p>
               <ul className="text-xs text-emerald-200/90 mt-2 space-y-1 font-mono list-disc list-inside">
                 <li>Go to <strong>Employee Claim</strong> tab to claim private payouts.</li>

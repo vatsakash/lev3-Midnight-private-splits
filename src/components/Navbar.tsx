@@ -42,7 +42,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             <div className="flex items-center gap-2">
               <h1 className="font-bold text-lg text-white tracking-tight">Private Splits</h1>
               <span className="bg-indigo-950/60 text-indigo-300 text-[10px] font-semibold px-2 py-0.5 rounded-full border border-indigo-500/30">
-                1AM Preview
+                1AM Preprod
               </span>
             </div>
             <p className="text-xs text-slate-400">Zero-Knowledge Confidential Payroll Engine</p>
@@ -115,7 +115,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 : 'text-slate-400 hover:text-white hover:bg-slate-800/50'
             }`}
           >
-            Preview Explorer
+            Preprod Explorer
           </button>
           <button
             onClick={() => {
@@ -158,7 +158,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               <div className="flex flex-col text-left">
                 <span className="text-[10px] text-slate-400 font-mono flex items-center gap-1">
                   <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
-                  1AM Preview Connected
+                  1AM Preprod Connected
                 </span>
                 <span className="text-xs font-mono text-indigo-300 font-semibold">
                   {formatAddr(walletState.address!)}

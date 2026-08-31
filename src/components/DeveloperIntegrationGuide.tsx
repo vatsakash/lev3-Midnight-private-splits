@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Terminal, ShieldCheck, CheckCircle2, XCircle, AlertCircle, RefreshCw, Cpu, Database, Network, Key, Code } from 'lucide-react';
 import { LaceWalletState, LedgerState } from '../midnight/types';
-import { MidnightDAppConnector, MIDNIGHT_PREVIEW_CONFIG } from '../midnight/dappConnector';
+import { MidnightDAppConnector, MIDNIGHT_PREPROD_CONFIG } from '../midnight/dappConnector';
 import { MidnightPayrollEngine } from '../midnight/payrollSimulator';
 
 interface DeveloperIntegrationGuideProps {
@@ -23,12 +23,12 @@ export const DeveloperIntegrationGuide: React.FC<DeveloperIntegrationGuideProps>
 
   const [indexerCheck, setIndexerCheck] = useState<{ status: 'testing' | 'pass' | 'fail'; message: string }>({
     status: 'testing',
-    message: 'Testing connection to Midnight Preview Indexer...',
+    message: 'Testing connection to Midnight Preprod Indexer...',
   });
 
   const [rpcCheck, setRpcCheck] = useState<{ status: 'testing' | 'pass' | 'fail'; message: string }>({
     status: 'testing',
-    message: 'Testing connection to Midnight Preview Node RPC...',
+    message: 'Testing connection to Midnight Preprod Node RPC...',
   });
 
   const [circuitCheck, setCircuitCheck] = useState<{ status: 'testing' | 'pass' | 'fail'; message: string }>({
@@ -44,7 +44,7 @@ export const DeveloperIntegrationGuide: React.FC<DeveloperIntegrationGuideProps>
 
   const runFullDiagnostics = async () => {
     setDiagnosticLogs([]);
-    addLog('Starting Midnight Preview Environment & Integration Diagnostics...');
+    addLog('Starting Midnight Preprod Environment & Integration Diagnostics...');
 
     // 1. Check Wallet Extension Detection
     addLog('Scanning window.midnight UUID keys for 1AM / Lace extension...');
@@ -58,17 +58,17 @@ export const DeveloperIntegrationGuide: React.FC<DeveloperIntegrationGuideProps>
     } else {
       setWalletCheck({
         status: 'pass',
-        message: '1AM Preview Mode Active (In-browser extension provider fallback ready).',
+        message: '1AM Preprod Mode Active (In-browser extension provider fallback ready).',
       });
-      addLog('INFO: 1AM extension fallback active for preview network interactions.');
+      addLog('INFO: 1AM extension fallback active for preprod network interactions.');
     }
 
     // 2. Check Indexer Endpoint
-    addLog(`Pinging Indexer URI: ${MIDNIGHT_PREVIEW_CONFIG.indexerUri}`);
+    addLog(`Pinging Indexer URI: ${MIDNIGHT_PREPROD_CONFIG.indexerUri}`);
     try {
       setIndexerCheck({
         status: 'pass',
-        message: `Indexer Reachable (GraphQL Endpoint: ${MIDNIGHT_PREVIEW_CONFIG.indexerUri})`,
+        message: `Indexer Reachable (GraphQL Endpoint: ${MIDNIGHT_PREPROD_CONFIG.indexerUri})`,
       });
       addLog('PASS: Indexer GraphQL endpoint responsive.');
     } catch (e: any) {
@@ -80,11 +80,11 @@ export const DeveloperIntegrationGuide: React.FC<DeveloperIntegrationGuideProps>
     }
 
     // 3. Check RPC Endpoint
-    addLog(`Pinging RPC Node URI: ${MIDNIGHT_PREVIEW_CONFIG.nodeRpcUri}`);
+    addLog(`Pinging RPC Node URI: ${MIDNIGHT_PREPROD_CONFIG.nodeRpcUri}`);
     try {
       setRpcCheck({
         status: 'pass',
-        message: `RPC Node Reachable (${MIDNIGHT_PREVIEW_CONFIG.nodeRpcUri})`,
+        message: `RPC Node Reachable (${MIDNIGHT_PREPROD_CONFIG.nodeRpcUri})`,
       });
       addLog('PASS: Substrate RPC node responsive.');
     } catch (e: any) {
@@ -118,7 +118,7 @@ export const DeveloperIntegrationGuide: React.FC<DeveloperIntegrationGuideProps>
       addLog(`FAIL: Circuit check error: ${err.message}`);
     }
 
-    addLog('Diagnostics complete. All systems ready for Midnight Preview DApp execution.');
+    addLog('Diagnostics complete. All systems ready for Midnight Preprod DApp execution.');
   };
 
   useEffect(() => {
@@ -139,7 +139,7 @@ export const DeveloperIntegrationGuide: React.FC<DeveloperIntegrationGuideProps>
                 Developer Integration & Environment Guide (`/integration`)
               </h2>
               <p className="text-sm text-slate-300 mt-1">
-                Real-time diagnostic test suite for 1AM wallet detection, Midnight Preview endpoints, and Compact ZK circuit constraints.
+                Real-time diagnostic test suite for 1AM wallet detection, Midnight Preprod endpoints, and Compact ZK circuit constraints.
               </p>
             </div>
           </div>

@@ -4,7 +4,7 @@ import { ContractDeploy } from './components/ContractDeploy';
 import { AdminPayroll } from './components/AdminPayroll';
 import { EmployeeClaim } from './components/EmployeeClaim';
 import { AuditDisclosure } from './components/AuditDisclosure';
-import { PreviewExplorer } from './components/PreviewExplorer';
+import { PreprodExplorer } from './components/PreprodExplorer';
 import { CircuitLogsModal } from './components/CircuitLogsModal';
 import { MidnightDAppConnector } from './midnight/dappConnector';
 import { MidnightPayrollEngine } from './midnight/payrollSimulator';
@@ -44,8 +44,8 @@ export function App() {
 
   useEffect(() => {
     refreshData();
-    // Explicitly set network ID to preview
-    connector.setNetworkIdExplicitly('preview');
+    // Explicitly set network ID to preprod
+    connector.setNetworkIdExplicitly('preprod');
 
     const handlePopState = () => {
       setActiveTab(getInitialTab());
@@ -120,7 +120,7 @@ export function App() {
         )}
 
         {activeTab === 'explorer' && (
-          <PreviewExplorer ledgerState={ledgerState} />
+          <PreprodExplorer ledgerState={ledgerState} />
         )}
 
         {activeTab === 'integration' && (
@@ -135,8 +135,8 @@ export function App() {
             Built with <span className="text-indigo-400">1AM &amp; Midnight Network</span> — Compact Minokawa Circuits
           </div>
           <div className="flex items-center gap-4 font-mono text-[11px]">
-            <span>1AM Preview Deployment</span>
-            <span className="text-emerald-400">● 1AM Preview Connected</span>
+            <span>1AM Preprod Deployment</span>
+            <span className="text-emerald-400">● 1AM Preprod Connected</span>
           </div>
         </div>
       </footer>

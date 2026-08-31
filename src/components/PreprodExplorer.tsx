@@ -1,13 +1,13 @@
 import React from 'react';
 import { Database, Network, Server, Code } from 'lucide-react';
 import { LedgerState } from '../midnight/types';
-import { MIDNIGHT_PREVIEW_CONFIG } from '../midnight/dappConnector';
+import { MIDNIGHT_PREPROD_CONFIG } from '../midnight/dappConnector';
 
-interface PreviewExplorerProps {
+interface PreprodExplorerProps {
   ledgerState: LedgerState;
 }
 
-export const PreviewExplorer: React.FC<PreviewExplorerProps> = ({ ledgerState }) => {
+export const PreprodExplorer: React.FC<PreprodExplorerProps> = ({ ledgerState }) => {
   return (
     <div className="space-y-8">
       {/* Top Banner */}
@@ -19,7 +19,7 @@ export const PreviewExplorer: React.FC<PreviewExplorerProps> = ({ ledgerState })
             </div>
             <div>
               <h2 className="text-xl font-bold text-white flex items-center gap-2">
-                Midnight Preview Network Inspector
+                Midnight Preprod Network Inspector
               </h2>
               <p className="text-sm text-slate-300 mt-1">
                 Verifiable on-chain smart contract deployment and network indexing endpoints.
@@ -29,7 +29,7 @@ export const PreviewExplorer: React.FC<PreviewExplorerProps> = ({ ledgerState })
 
           <div className="flex items-center gap-2 bg-emerald-950/80 text-emerald-300 px-3.5 py-1.5 rounded-xl border border-emerald-500/40 text-xs font-mono">
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-            1AM Preview Network Active
+            1AM Preprod Network Active
           </div>
         </div>
       </div>
@@ -46,15 +46,15 @@ export const PreviewExplorer: React.FC<PreviewExplorerProps> = ({ ledgerState })
           <div className="bg-[#090D16] p-4 rounded-xl border border-slate-800 space-y-2 font-mono text-xs">
             <div className="text-slate-400 text-[11px]">Bech32m Contract Address:</div>
             <div className="text-indigo-300 font-bold break-all bg-indigo-950/30 p-2.5 rounded border border-indigo-800/40">
-              {MIDNIGHT_PREVIEW_CONFIG.contractAddress}
+              {MIDNIGHT_PREPROD_CONFIG.contractAddress}
             </div>
             <div className="text-slate-400 text-[11px] pt-1">Original Contract Hex Address:</div>
             <div className="text-cyan-300 font-bold break-all bg-cyan-950/30 p-2 rounded border border-cyan-800/40 text-[11px]">
-              {MIDNIGHT_PREVIEW_CONFIG.originalContractHexAddress}
+              {MIDNIGHT_PREPROD_CONFIG.originalContractHexAddress}
             </div>
             <div className="flex items-center justify-between text-[11px] pt-1">
               <span className="text-slate-400">Network:</span>
-              <span className="text-cyan-400 font-semibold">Midnight Preview Network (`preview`)</span>
+              <span className="text-cyan-400 font-semibold">Midnight Preprod Network (`preprod`)</span>
             </div>
             <div className="flex items-center justify-between text-[11px]">
               <span className="text-slate-400">Compiler:</span>
@@ -73,12 +73,12 @@ export const PreviewExplorer: React.FC<PreviewExplorerProps> = ({ ledgerState })
           <div className="space-y-3 font-mono text-xs">
             <div className="bg-[#090D16] p-3 rounded-xl border border-slate-800">
               <div className="text-slate-400 text-[10px]">INDEXER GRAPHQL ENDPOINT</div>
-              <div className="text-cyan-300 truncate mt-0.5">{MIDNIGHT_PREVIEW_CONFIG.indexerUri}</div>
+              <div className="text-cyan-300 truncate mt-0.5">{MIDNIGHT_PREPROD_CONFIG.indexerUri}</div>
             </div>
 
             <div className="bg-[#090D16] p-3 rounded-xl border border-slate-800">
               <div className="text-slate-400 text-[10px]">NODE RPC ENDPOINT</div>
-              <div className="text-indigo-300 truncate mt-0.5">{MIDNIGHT_PREVIEW_CONFIG.nodeRpcUri}</div>
+              <div className="text-indigo-300 truncate mt-0.5">{MIDNIGHT_PREPROD_CONFIG.nodeRpcUri}</div>
             </div>
           </div>
         </div>

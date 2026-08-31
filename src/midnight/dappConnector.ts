@@ -7,17 +7,17 @@ declare global {
   }
 }
 
-// Midnight Network Configuration (Explicit Preview Network Setup)
-export const MIDNIGHT_PREVIEW_CONFIG = {
-  networkId: 'preview' as const,
-  indexerUri: 'https://indexer.preview.midnight.network/api/v4/graphql',
-  indexerWsUri: 'wss://indexer.preview.midnight.network/api/v4/graphql/ws',
-  nodeRpcUri: 'https://rpc.preview.midnight.network',
-  contractAddress: 'mn_contract_preview1q9x74a87c0v28e53l90qw82k49z6m31f82y01',
+// Midnight Network Configuration (Explicit Preprod Network Setup)
+export const MIDNIGHT_PREPROD_CONFIG = {
+  networkId: 'preprod' as const,
+  indexerUri: 'https://indexer.preprod.midnight.network/api/v4/graphql',
+  indexerWsUri: 'wss://indexer.preprod.midnight.network/api/v4/graphql/ws',
+  nodeRpcUri: 'https://rpc.preprod.midnight.network',
+  contractAddress: 'mn_contract_preprod1q9x74a87c0v28e53l90qw82k49z6m31f82y01',
   originalContractHexAddress: '8131a6c88f0b726c57bcf471cf8831947749e4dc68bd458c3692af73605f74d3',
 };
 
-// Generates a Bech32m address formatted for Midnight Preview network
+// Generates a Bech32m address formatted for Midnight Preprod network
 export function generateBech32mAddress(seed: string = 'demo'): string {
   const chars = 'qw23456789abcdef01ghjkmnpqrstuvwxyz';
   let hash = 0;
@@ -30,7 +30,7 @@ export function generateBech32mAddress(seed: string = 'demo'): string {
     const idx = Math.abs((hash + i * 13) % chars.length);
     suffix += chars[idx];
   }
-  return `mn_addr_preview1q${suffix}`;
+  return `mn_addr_preprod1q${suffix}`;
 }
 
 export class MidnightDAppConnector {
@@ -40,7 +40,7 @@ export class MidnightDAppConnector {
     address: null,
     coinPublicKey: null,
     encryptionPublicKey: null,
-    networkId: 'preview',
+    networkId: 'preprod',
     balance: 5000000000n, // 5000 tNIGHT
   };
 
@@ -71,13 +71,13 @@ export class MidnightDAppConnector {
         address: savedAddress,
         coinPublicKey: '0x' + Array.from({ length: 64 }, () => Math.floor(Math.random() * 16).toString(16)).join(''),
         encryptionPublicKey: '0x' + Array.from({ length: 64 }, () => Math.floor(Math.random() * 16).toString(16)).join(''),
-        networkId: 'preview',
+        networkId: 'preprod',
         balance: 5000000000n,
       };
     }
   }
 
-  public setNetworkIdExplicitly(netId: 'preview' = 'preview'): 'preview' {
+  public setNetworkIdExplicitly(netId: 'preprod' = 'preprod'): 'preprod' {
     this.state.networkId = netId;
     return netId;
   }
@@ -135,19 +135,19 @@ export class MidnightDAppConnector {
   }
 
   public async connect(): Promise<LaceWalletState> {
-    this.setNetworkIdExplicitly('preview');
+    this.setNetworkIdExplicitly('preprod');
 
     console.log('Detecting 1AM / Lace Midnight Wallet Extension in DOM (with polling)...');
     const wallet = await this.detectWallet(3000);
 
     if (wallet) {
       const walletName = wallet.name || wallet.walletName || '1AM Wallet';
-      console.log(`Discovered Midnight Wallet Extension: "${walletName}". Connecting to preview network...`);
+      console.log(`Discovered Midnight Wallet Extension: "${walletName}". Connecting to preprod network...`);
 
       try {
         let connectedAPI: any = null;
         if (typeof wallet.connect === 'function') {
-          connectedAPI = await wallet.connect('preview');
+          connectedAPI = await wallet.connect('preprod');
         } else if (typeof wallet.enable === 'function') {
           connectedAPI = await wallet.enable();
         }
@@ -182,7 +182,7 @@ export class MidnightDAppConnector {
             address: address || generateBech32mAddress('1am-user'),
             coinPublicKey: coinPublicKey || '0xabc123...',
             encryptionPublicKey: encryptionPublicKey || '0xdef456...',
-            networkId: 'preview',
+            networkId: 'preprod',
             balance: 5000000000n,
           };
 
@@ -194,15 +194,15 @@ export class MidnightDAppConnector {
       }
     }
 
-    // In-browser 1AM Preview provider fallback for development/sandbox environments when extension is not detected
-    console.info('1AM Browser Extension not detected after polling. Initializing 1AM Preview provider session.');
-    const mockAddress = generateBech32mAddress('1am-preview-user-' + Date.now().toString().slice(-4));
+    // In-browser 1AM Preprod provider fallback for development/sandbox environments when extension is not detected
+    console.info('1AM Browser Extension not detected after polling. Initializing 1AM Preprod provider session.');
+    const mockAddress = generateBech32mAddress('1am-preprod-user-' + Date.now().toString().slice(-4));
     this.state = {
       isConnected: true,
       address: mockAddress,
       coinPublicKey: '0x3f8a91b4c6d2e5f1a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0',
       encryptionPublicKey: '0x9a8b7c6d5e4f3a2b1c0d9e8f7a6b5c4d3e2f1a0b9c8d7e6f5a4b3c2d1e0f9a8b',
-      networkId: 'preview',
+      networkId: 'preprod',
       balance: 5000000000n,
     };
     this.getStorage()?.setItem('lace_connected_address', mockAddress);
@@ -215,7 +215,7 @@ export class MidnightDAppConnector {
       address: null,
       coinPublicKey: null,
       encryptionPublicKey: null,
-      networkId: 'preview',
+      networkId: 'preprod',
       balance: 0n,
     };
     this.getStorage()?.removeItem('lace_connected_address');
@@ -228,8 +228,8 @@ export class MidnightDAppConnector {
 
   public getServiceConfig() {
     return {
-      indexer: MIDNIGHT_PREVIEW_CONFIG.indexerUri,
-      node: MIDNIGHT_PREVIEW_CONFIG.nodeRpcUri,
+      indexer: MIDNIGHT_PREPROD_CONFIG.indexerUri,
+      node: MIDNIGHT_PREPROD_CONFIG.nodeRpcUri,
     };
   }
 }

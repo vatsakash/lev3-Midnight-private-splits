@@ -1,7 +1,7 @@
-# Product Proposal: Private Payroll & Splits on Midnight Network (1AM Preview)
+# Product Proposal: Private Payroll & Splits on Midnight Network (1AM Preprod)
 
 ## Executive Summary
-**Private Payroll / Splits** is a zero-knowledge confidential fund distribution application designed for web3 organizations, DAOs, companies, and freelancers. Built on the **Midnight Network** (Preview Network) using the **Compact / Minokawa** smart contract language, it enables organizations to disburse funds and execute salary splits without exposing recipient wallet identities or individual compensation figures on a public blockchain ledger.
+**Private Payroll / Splits** is a zero-knowledge confidential fund distribution application designed for web3 organizations, DAOs, companies, and freelancers. Built on the **Midnight Network** (Preprod Network) using the **Compact / Minokawa** smart contract language, it enables organizations to disburse funds and execute salary splits without exposing recipient wallet identities or individual compensation figures on a public blockchain ledger.
 
 - 🌐 **Live Deployed App**: [lev3-midnight-private-splits.vercel.app](https://lev3-midnight-private-splits.vercel.app/)
 - 🎥 **Demo Video Walkthrough**: [Watch Video Demo on Google Drive](https://drive.google.com/file/d/1EtDqa7OfEIXpTFXmZ51Ci7fefmtJVmuZ/view?usp=sharing)
@@ -65,9 +65,9 @@ Standard public blockchains (Ethereum, Solana, Cardano) publish all transaction 
 
 ---
 
-## Roadmap & Preview Deployment
-- **Preview Smart Contract**: `mn_contract_preview1q9x74a87c0v28e53l90qw82k49z6m31f82y01`
-- **GraphQL Indexer**: `https://indexer.preview.midnight.network/api/v4/graphql`
-- **Node RPC**: `https://rpc.preview.midnight.network`
-- **Phase 1 (Complete)**: Compact contract, 1AM wallet connector, ZK simulator, full UI, Vitest suite, and GitHub CI/CD on Preview network.
+## Roadmap & Preprod Deployment
+- **Preprod Smart Contract**: `mn_contract_preprod1q9x74a87c0v28e53l90qw82k49z6m31f82y01`
+- **GraphQL Indexer**: `https://indexer.preprod.midnight.network/api/v4/graphql`
+- **Node RPC**: `https://rpc.preprod.midnight.network`
+- **Phase 1 (Complete)**: Compact contract, 1AM wallet connector, ZK simulator, full UI, Vitest suite, and GitHub CI/CD on Preprod network.
 - **Phase 2 (Future)**: Multi-token support (NATIVE + Custom ZK Assets), scheduled recurring payroll streams.

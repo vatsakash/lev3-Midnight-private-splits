@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Rocket, ShieldCheck, CheckCircle2, Wallet, ExternalLink, Cpu, Copy, Check } from 'lucide-react';
 import { LaceWalletState, ContractDeployResult } from '../midnight/types';
 import { BrowserContractDeployer } from '../midnight/browserDeployer';
-import { MIDNIGHT_PREVIEW_CONFIG } from '../midnight/dappConnector';
+import { MIDNIGHT_PREPROD_CONFIG } from '../midnight/dappConnector';
 
 interface ContractDeployProps {
   walletState: LaceWalletState;
@@ -27,10 +27,10 @@ export const ContractDeploy: React.FC<ContractDeployProps> = ({
     if (savedAddress && !deployResult) {
       setDeployResult({
         contractAddress: savedAddress,
-        txHash: localStorage.getItem('preview_deploy_tx_hash') || '0xabc123...',
-        networkId: 'preview',
+        txHash: localStorage.getItem('preprod_deploy_tx_hash') || '0xabc123...',
+        networkId: 'preprod',
         timestamp: new Date().toISOString(),
-        deployerAddress: walletState.address || 'mn_addr_preview1q...',
+        deployerAddress: walletState.address || 'mn_addr_preprod1q...',
       });
     }
   }, []);
@@ -44,7 +44,7 @@ export const ContractDeploy: React.FC<ContractDeployProps> = ({
 
     const budget = BigInt(initialBudgetInput || '0');
     setIsDeploying(true);
-    setDeployStep('Setting Network ID explicitly to preview...');
+    setDeployStep('Setting Network ID explicitly to preprod...');
 
     try {
       await new Promise((r) => setTimeout(r, 400));
@@ -86,14 +86,14 @@ export const ContractDeploy: React.FC<ContractDeployProps> = ({
                 1AM Extension Browser Contract Deployment (`/deploy`)
               </h2>
               <p className="text-sm text-slate-300 mt-1">
-                Deploy the Compact Private Payroll smart contract directly from your browser via the 1AM wallet extension on Midnight Preview.
+                Deploy the Compact Private Payroll smart contract directly from your browser via the 1AM wallet extension on Midnight Preprod.
               </p>
             </div>
           </div>
 
           <div className="flex items-center gap-2 bg-indigo-950/80 text-indigo-300 px-3.5 py-1.5 rounded-xl border border-indigo-500/40 text-xs font-mono">
             <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
-            1AM Preview Mode
+            1AM Preprod Mode
           </div>
         </div>
       </div>
@@ -104,7 +104,7 @@ export const ContractDeploy: React.FC<ContractDeployProps> = ({
           <div>
             <h3 className="font-semibold text-white text-base">Deploy Compact Smart Contract</h3>
             <p className="text-xs text-slate-400 font-mono mt-0.5">
-              Network: Midnight Preview (`preview`) | Engine: 1AM Browser Prover
+              Network: Midnight Preprod (`preprod`) | Engine: 1AM Browser Prover
             </p>
           </div>
 
@@ -151,7 +151,7 @@ export const ContractDeploy: React.FC<ContractDeployProps> = ({
               ) : (
                 <>
                   <Rocket className="w-4 h-4" />
-                  Deploy Contract via 1AM Extension (Preview)
+                  Deploy Contract via 1AM Extension (Preprod)
                 </>
               )}
             </button>
@@ -168,7 +168,7 @@ export const ContractDeploy: React.FC<ContractDeployProps> = ({
               <h3 className="font-bold text-white text-base">Contract Deployed Successfully!</h3>
             </div>
             <span className="bg-emerald-900/60 text-emerald-300 font-mono text-[10px] px-3 py-1 rounded-full border border-emerald-500/30">
-              Midnight Preview
+              Midnight Preprod
             </span>
           </div>
 
@@ -193,7 +193,7 @@ export const ContractDeploy: React.FC<ContractDeployProps> = ({
               <div className="pt-2 border-t border-slate-800">
                 <span className="text-slate-500 text-[10px] block">ORIGINAL CONTRACT HEX ADDRESS</span>
                 <span className="text-indigo-300 font-bold break-all text-xs font-mono">
-                  {MIDNIGHT_PREVIEW_CONFIG.originalContractHexAddress}
+                  {MIDNIGHT_PREPROD_CONFIG.originalContractHexAddress}
                 </span>
               </div>
             </div>

@@ -42,7 +42,7 @@ export const EmployeeClaim: React.FC<EmployeeClaimProps> = ({
       const proofLog = await engine.claimPayout(splitId);
       setClaimMessage({
         type: 'success',
-        text: 'Payout claimed successfully! ZK proof verified on Midnight Preview.',
+        text: 'Payout claimed successfully! ZK proof verified on Midnight Preprod.',
         txHash: proofLog.txHash,
       });
       onRefresh();
@@ -55,7 +55,7 @@ export const EmployeeClaim: React.FC<EmployeeClaimProps> = ({
 
   const handleQuickFinalize = async () => {
     setIsFinalizing(true);
-    setClaimMessage({ type: 'info', text: 'Finalizing payroll batch on Midnight Preview...' });
+    setClaimMessage({ type: 'info', text: 'Finalizing payroll batch on Midnight Preprod...' });
     try {
       await engine.finalizePayroll();
       setClaimMessage({

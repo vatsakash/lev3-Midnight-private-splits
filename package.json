@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "lint": "tsc --noEmit",
-    "preview": "vite preview",
+    "preprod": "vite preprod",
     "test": "vitest run",
     "test:watch": "vitest"
   },

@@ -1,5 +1,5 @@
 import { LedgerState, PrivateSalarySplit, ZkProofLog, SelectiveDisclosureReport } from './types';
-import { MIDNIGHT_PREVIEW_CONFIG, generateBech32mAddress } from './dappConnector';
+import { MIDNIGHT_PREPROD_CONFIG, generateBech32mAddress } from './dappConnector';
 
 export class MidnightPayrollEngine {
   private static instance: MidnightPayrollEngine;
@@ -16,8 +16,8 @@ export class MidnightPayrollEngine {
       claimedCount: 0,
       totalAllocatedAmount: 0n,
       isFinalized: false,
-      contractAddress: MIDNIGHT_PREVIEW_CONFIG.contractAddress,
-      deploymentNetwork: 'preview',
+      contractAddress: MIDNIGHT_PREPROD_CONFIG.contractAddress,
+      deploymentNetwork: 'preprod',
     };
     this.loadPersistedState();
   }
@@ -112,7 +112,7 @@ export class MidnightPayrollEngine {
           const selected = wallets[0];
           let connectedAPI = selected;
           if (typeof selected.connect === 'function') {
-            connectedAPI = await selected.connect('preview');
+            connectedAPI = await selected.connect('preprod');
           } else if (typeof selected.enable === 'function') {
             connectedAPI = await selected.enable();
           }
@@ -395,8 +395,8 @@ export class MidnightPayrollEngine {
       claimedCount: 0,
       totalAllocatedAmount: 0n,
       isFinalized: false,
-      contractAddress: MIDNIGHT_PREVIEW_CONFIG.contractAddress,
-      deploymentNetwork: 'preview',
+      contractAddress: MIDNIGHT_PREPROD_CONFIG.contractAddress,
+      deploymentNetwork: 'preprod',
     };
     this.privateSplits = [];
     this.proofLogs = [];

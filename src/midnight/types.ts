@@ -7,7 +7,7 @@ export interface LedgerState {
   totalAllocatedAmount: bigint;
   isFinalized: boolean;
   contractAddress: string;
-  deploymentNetwork: 'preview' | 'localnet';
+  deploymentNetwork: 'preprod' | 'localnet';
 }
 
 export interface PrivateSalarySplit {
@@ -36,10 +36,10 @@ export interface ZkProofLog {
 
 export interface LaceWalletState {
   isConnected: boolean;
-  address: string | null; // Bech32m format e.g. mn_addr_preview1...
+  address: string | null; // Bech32m format e.g. mn_addr_preprod1...
   coinPublicKey: string | null;
   encryptionPublicKey: string | null;
-  networkId: 'preview' | 'localnet';
+  networkId: 'preprod' | 'localnet';
   balance: bigint;
 }
 
@@ -57,7 +57,7 @@ export interface SelectiveDisclosureReport {
 export interface ContractDeployResult {
   contractAddress: string;
   txHash: string;
-  networkId: 'preview';
+  networkId: 'preprod';
   timestamp: string;
   deployerAddress: string;
 }
