@@ -20,7 +20,7 @@ export const ContractDeploy: React.FC<ContractDeployProps> = ({
   const [isDeploying, setIsDeploying] = useState(false);
   const [deployStep, setDeployStep] = useState<string>('');
   const [deployResult, setDeployResult] = useState<ContractDeployResult | null>(null);
-  const [copied, setCopied] = useState(false);
+  const [copiedItem, setCopiedItem] = useState<string | null>(null);
 
   useEffect(() => {
     const savedAddress = deployer.getSavedDeployedAddress();
@@ -66,10 +66,10 @@ export const ContractDeploy: React.FC<ContractDeployProps> = ({
     }
   };
 
-  const copyToClipboard = (text: string) => {
+  const copyToClipboard = (text: string, label: string) => {
     navigator.clipboard.writeText(text);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    setCopiedItem(label);
+    setTimeout(() => setCopiedItem(null), 2000);
   };
 
   return (
@@ -173,26 +173,35 @@ export const ContractDeploy: React.FC<ContractDeployProps> = ({
           </div>
 
           <div className="space-y-3 font-mono text-xs">
-            {/* Deployed Contract Address */}
+            {/* Deployed Contract Address with Prominent Copy Button */}
             <div className="bg-[#090D16] p-4 rounded-xl border border-emerald-800/40 space-y-2">
               <div className="text-slate-400 text-[10px] flex items-center justify-between">
-                <span>DEPLOYED BECH32M CONTRACT ADDRESS</span>
+                <span className="font-semibold text-emerald-400">DEPLOYED BECH32M CONTRACT ADDRESS</span>
                 <button
-                  onClick={() => copyToClipboard(deployResult.contractAddress)}
-                  className="text-cyan-400 hover:text-cyan-300 flex items-center gap-1 text-[10px]"
+                  onClick={() => copyToClipboard(deployResult.contractAddress, 'address')}
+                  className="px-3 py-1 bg-cyan-950/80 hover:bg-cyan-900 text-cyan-300 rounded-lg text-xs font-semibold border border-cyan-500/40 transition flex items-center gap-1.5 shadow-sm"
                 >
-                  {copied ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
-                  {copied ? 'Copied!' : 'Copy Address'}
+                  {copiedItem === 'address' ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                  {copiedItem === 'address' ? 'Copied Address!' : 'Copy Contract Address'}
                 </button>
               </div>
-              <div className="text-cyan-300 font-bold break-all text-sm py-0.5">
+              <div className="text-cyan-300 font-bold break-all text-sm py-1 bg-cyan-950/20 p-2.5 rounded-lg border border-cyan-800/30">
                 {deployResult.contractAddress}
               </div>
 
-              {/* Original Contract Hex Address */}
+              {/* Original Contract Hex Address with Copy Button */}
               <div className="pt-2 border-t border-slate-800">
-                <span className="text-slate-500 text-[10px] block">ORIGINAL CONTRACT HEX ADDRESS</span>
-                <span className="text-indigo-300 font-bold break-all text-xs font-mono">
+                <div className="flex items-center justify-between mb-1">
+                  <span className="text-slate-500 text-[10px]">ORIGINAL CONTRACT HEX ADDRESS</span>
+                  <button
+                    onClick={() => copyToClipboard(MIDNIGHT_PREPROD_CONFIG.originalContractHexAddress, 'hex')}
+                    className="text-indigo-400 hover:text-indigo-300 flex items-center gap-1 text-[10px]"
+                  >
+                    {copiedItem === 'hex' ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
+                    {copiedItem === 'hex' ? 'Copied Hex!' : 'Copy Hex ID'}
+                  </button>
+                </div>
+                <span className="text-indigo-300 font-bold break-all text-xs font-mono block bg-indigo-950/20 p-2 rounded border border-indigo-800/30">
                   {MIDNIGHT_PREPROD_CONFIG.originalContractHexAddress}
                 </span>
               </div>
@@ -201,21 +210,38 @@ export const ContractDeploy: React.FC<ContractDeployProps> = ({
             {/* Deployment Details & Explorer Link */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-[11px]">
               <div className="bg-[#090D16] p-3 rounded-xl border border-slate-800">
-                <span className="text-slate-500 block text-[10px]">TRANSACTION HASH</span>
-                <span className="text-indigo-300 truncate block">{deployResult.txHash}</span>
+                <div className="flex items-center justify-between mb-0.5">
+                  <span className="text-slate-500 text-[10px]">TRANSACTION HASH</span>
+                  <button
+                    onClick={() => copyToClipboard(deployResult.txHash, 'tx')}
+                    className="text-indigo-400 hover:text-indigo-300 flex items-center gap-1 text-[10px]"
+                  >
+                    {copiedItem === 'tx' ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
+                    {copiedItem === 'tx' ? 'Copied Tx!' : 'Copy Tx Hash'}
+                  </button>
+                </div>
+                <span className="text-indigo-300 truncate block font-mono">{deployResult.txHash}</span>
               </div>
               <div className="bg-[#090D16] p-3 rounded-xl border border-slate-800">
                 <span className="text-slate-500 block text-[10px]">DEPLOYER ADDRESS</span>
-                <span className="text-slate-300 truncate block">{deployResult.deployerAddress}</span>
+                <span className="text-slate-300 truncate block font-mono">{deployResult.deployerAddress}</span>
               </div>
             </div>
 
-            <div className="pt-2 flex justify-end">
+            <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-3">
+              <button
+                onClick={() => copyToClipboard(deployResult.contractAddress, 'address')}
+                className="w-full sm:w-auto px-4 py-2 bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-500 hover:to-indigo-600 text-white rounded-xl text-xs font-semibold flex items-center justify-center gap-2 shadow-md transition"
+              >
+                {copiedItem === 'address' ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
+                {copiedItem === 'address' ? 'Copied Contract Address!' : '📋 Copy Newly Deployed Contract Address'}
+              </button>
+
               <a
                 href="https://preprod.midnightexplorer.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-indigo-950/60 hover:bg-indigo-900/80 text-indigo-300 rounded-xl text-xs font-mono border border-indigo-500/30 transition shadow-sm"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 px-4 py-2 bg-indigo-950/60 hover:bg-indigo-900/80 text-indigo-300 rounded-xl text-xs font-mono border border-indigo-500/30 transition shadow-sm"
               >
                 <ExternalLink className="w-3.5 h-3.5 text-cyan-400" />
                 <span>Verify on Midnight Preprod Explorer ↗</span>

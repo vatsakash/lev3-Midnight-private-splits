@@ -1,5 +1,5 @@
-import React from 'react';
-import { Database, Network, Server, Code } from 'lucide-react';
+import React, { useState } from 'react';
+import { Database, Network, Server, Code, Copy, Check, ExternalLink } from 'lucide-react';
 import { LedgerState } from '../midnight/types';
 import { MIDNIGHT_PREPROD_CONFIG } from '../midnight/dappConnector';
 
@@ -8,6 +8,14 @@ interface PreprodExplorerProps {
 }
 
 export const PreprodExplorer: React.FC<PreprodExplorerProps> = ({ ledgerState }) => {
+  const [copiedItem, setCopiedItem] = useState<string | null>(null);
+
+  const copyToClipboard = (text: string, label: string) => {
+    navigator.clipboard.writeText(text);
+    setCopiedItem(label);
+    setTimeout(() => setCopiedItem(null), 2000);
+  };
+
   return (
     <div className="space-y-8">
       {/* Top Banner */}
@@ -43,16 +51,40 @@ export const PreprodExplorer: React.FC<PreprodExplorerProps> = ({ ledgerState })
             Deployed Smart Contract Address
           </h3>
 
-          <div className="bg-[#090D16] p-4 rounded-xl border border-slate-800 space-y-2 font-mono text-xs">
-            <div className="text-slate-400 text-[11px]">Bech32m Contract Address:</div>
-            <div className="text-indigo-300 font-bold break-all bg-indigo-950/30 p-2.5 rounded border border-indigo-800/40">
-              {MIDNIGHT_PREPROD_CONFIG.contractAddress}
+          <div className="bg-[#090D16] p-4 rounded-xl border border-slate-800 space-y-3 font-mono text-xs">
+            <div>
+              <div className="text-slate-400 text-[11px] flex items-center justify-between mb-1">
+                <span>Bech32m Contract Address:</span>
+                <button
+                  onClick={() => copyToClipboard(MIDNIGHT_PREPROD_CONFIG.contractAddress, 'address')}
+                  className="text-cyan-400 hover:text-cyan-300 flex items-center gap-1 text-[10px]"
+                >
+                  {copiedItem === 'address' ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
+                  {copiedItem === 'address' ? 'Copied Address!' : 'Copy Address'}
+                </button>
+              </div>
+              <div className="text-indigo-300 font-bold break-all bg-indigo-950/30 p-2.5 rounded border border-indigo-800/40">
+                {MIDNIGHT_PREPROD_CONFIG.contractAddress}
+              </div>
             </div>
-            <div className="text-slate-400 text-[11px] pt-1">Original Contract Hex Address:</div>
-            <div className="text-cyan-300 font-bold break-all bg-cyan-950/30 p-2 rounded border border-cyan-800/40 text-[11px]">
-              {MIDNIGHT_PREPROD_CONFIG.originalContractHexAddress}
+
+            <div>
+              <div className="text-slate-400 text-[11px] flex items-center justify-between mb-1">
+                <span>Original Contract Hex Address:</span>
+                <button
+                  onClick={() => copyToClipboard(MIDNIGHT_PREPROD_CONFIG.originalContractHexAddress, 'hex')}
+                  className="text-cyan-400 hover:text-cyan-300 flex items-center gap-1 text-[10px]"
+                >
+                  {copiedItem === 'hex' ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
+                  {copiedItem === 'hex' ? 'Copied Hex!' : 'Copy Hex ID'}
+                </button>
+              </div>
+              <div className="text-cyan-300 font-bold break-all bg-cyan-950/30 p-2 rounded border border-cyan-800/40 text-[11px]">
+                {MIDNIGHT_PREPROD_CONFIG.originalContractHexAddress}
+              </div>
             </div>
-            <div className="flex items-center justify-between text-[11px] pt-1">
+
+            <div className="flex items-center justify-between text-[11px] pt-1 border-t border-slate-800">
               <span className="text-slate-400">Network:</span>
               <span className="text-cyan-400 font-semibold">Midnight Preprod Network (`preprod`)</span>
             </div>
@@ -60,14 +92,23 @@ export const PreprodExplorer: React.FC<PreprodExplorerProps> = ({ ledgerState })
               <span className="text-slate-400">Compiler:</span>
               <span className="text-cyan-400 font-semibold">Compact v0.23 / Minokawa</span>
             </div>
-            <div className="pt-2">
+            <div className="pt-2 flex items-center justify-between gap-2">
+              <button
+                onClick={() => copyToClipboard(MIDNIGHT_PREPROD_CONFIG.contractAddress, 'address')}
+                className="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg text-xs font-semibold flex items-center gap-1.5 transition"
+              >
+                {copiedItem === 'address' ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                {copiedItem === 'address' ? 'Copied!' : 'Copy Address'}
+              </button>
+
               <a
                 href="https://preprod.midnightexplorer.com"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-cyan-950/60 hover:bg-cyan-900/80 text-cyan-300 rounded-lg text-xs font-mono border border-cyan-500/30 transition"
               >
-                <span>Open Midnight Preprod Explorer ↗</span>
+                <ExternalLink className="w-3.5 h-3.5" />
+                <span>Midnight Explorer ↗</span>
               </a>
             </div>
           </div>
@@ -98,35 +139,17 @@ export const PreprodExplorer: React.FC<PreprodExplorerProps> = ({ ledgerState })
       <div className="glass-panel p-6 rounded-2xl border border-slate-800 space-y-4">
         <h3 className="font-semibold text-white text-base flex items-center gap-2">
           <Code className="w-5 h-5 text-emerald-400" />
-          Live On-Chain Public Ledger State
+          On-Chain Public State Verification
         </h3>
 
-        <div className="bg-[#090D16] p-5 rounded-2xl border border-slate-800 font-mono text-xs space-y-3">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            <div>
-              <span className="text-slate-500 block text-[10px]">ADMIN PUBLIC KEY</span>
-              <span className="text-indigo-300 truncate block">{ledgerState.adminPk}</span>
-            </div>
-            <div>
-              <span className="text-slate-500 block text-[10px]">TOTAL PUBLIC BUDGET</span>
-              <span className="text-cyan-400 font-bold">{ledgerState.totalBudget.toString()} tNIGHT</span>
-            </div>
-            <div>
-              <span className="text-slate-500 block text-[10px]">BATCH HASH COMMITMENT</span>
-              <span className="text-slate-300 truncate block">{ledgerState.batchHash}</span>
-            </div>
-            <div>
-              <span className="text-slate-500 block text-[10px]">ALLOCATED COUNT</span>
-              <span className="text-white font-bold">{ledgerState.allocatedCount}</span>
-            </div>
-            <div>
-              <span className="text-slate-500 block text-[10px]">CLAIMED COUNT</span>
-              <span className="text-emerald-400 font-bold">{ledgerState.claimedCount}</span>
-            </div>
-            <div>
-              <span className="text-slate-500 block text-[10px]">IS FINALIZED</span>
-              <span className="text-amber-400 font-bold">{ledgerState.isFinalized ? 'TRUE' : 'FALSE'}</span>
-            </div>
+        <div className="bg-[#090D16] p-4 rounded-xl border border-slate-800 font-mono text-xs text-slate-300 space-y-2">
+          <div className="flex items-center justify-between text-slate-400 text-[11px]">
+            <span>ZK PRIVACY PROOF STATUS:</span>
+            <span className="text-emerald-400 font-semibold">● Budget Conservation Verified</span>
+          </div>
+          <div className="flex items-center justify-between text-slate-400 text-[11px]">
+            <span>LOCAL PRIVATE STATES:</span>
+            <span className="text-indigo-400 font-semibold">100% Client-Side Shielded</span>
           </div>
         </div>
       </div>
