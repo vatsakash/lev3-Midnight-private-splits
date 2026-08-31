@@ -88,6 +88,9 @@ Run the Vitest contract & ZK privacy suite:
 npm test
 ```
 
+### 🧪 Vitest Passing Test Suite Output
+![Vitest Automated Test Suite Output](docs/screenshots/vitest_test_output.png)
+
 Run build verification:
 ```bash
 npm run lint

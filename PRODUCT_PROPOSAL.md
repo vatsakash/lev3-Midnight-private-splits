@@ -10,6 +10,7 @@
 ### 📸 Application & Deployment Screenshots
 ![1AM Extension Browser Contract Deployment](docs/screenshots/browser_deploy_desktop.png)
 ![All Checks Passed - Vercel & CI/CD](docs/screenshots/ci_cd_vercel_checks.png)
+![Vitest Automated Test Suite Output](docs/screenshots/vitest_test_output.png)
 
 ---
 
