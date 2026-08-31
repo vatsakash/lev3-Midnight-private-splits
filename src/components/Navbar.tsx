@@ -42,7 +42,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             <div className="flex items-center gap-2">
               <h1 className="font-bold text-lg text-white tracking-tight">Private Splits</h1>
               <span className="bg-indigo-950/60 text-indigo-300 text-[10px] font-semibold px-2 py-0.5 rounded-full border border-indigo-500/30">
-                1AM Preprod
+                Lace / 1AM Preprod
               </span>
             </div>
             <p className="text-xs text-slate-400">Zero-Knowledge Confidential Payroll Engine</p>
@@ -58,7 +58,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             }}
             className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all flex items-center gap-1 ${
               activeTab === 'deploy'
-                ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/30'
+                ? 'bg-indigo-600 text-white shadow-md'
                 : 'text-slate-400 hover:text-white hover:bg-slate-800/50'
             }`}
           >
@@ -72,7 +72,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             }}
             className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
               activeTab === 'admin'
-                ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/30'
+                ? 'bg-indigo-600 text-white shadow-md'
                 : 'text-slate-400 hover:text-white hover:bg-slate-800/50'
             }`}
           >
@@ -85,7 +85,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             }}
             className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
               activeTab === 'employee'
-                ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/30'
+                ? 'bg-indigo-600 text-white shadow-md'
                 : 'text-slate-400 hover:text-white hover:bg-slate-800/50'
             }`}
           >
@@ -98,7 +98,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             }}
             className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
               activeTab === 'audit'
-                ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/30'
+                ? 'bg-indigo-600 text-white shadow-md'
                 : 'text-slate-400 hover:text-white hover:bg-slate-800/50'
             }`}
           >
@@ -111,7 +111,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             }}
             className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
               activeTab === 'explorer'
-                ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/30'
+                ? 'bg-indigo-600 text-white shadow-md'
                 : 'text-slate-400 hover:text-white hover:bg-slate-800/50'
             }`}
           >
@@ -124,7 +124,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             }}
             className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
               activeTab === 'integration'
-                ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/30'
+                ? 'bg-indigo-600 text-white shadow-md'
                 : 'text-slate-400 hover:text-white hover:bg-slate-800/50'
             }`}
           >
@@ -132,11 +132,12 @@ export const Navbar: React.FC<NavbarProps> = ({
           </button>
         </nav>
 
-        {/* Wallet & Controls */}
+        {/* Action Controls & Wallet Connection */}
         <div className="flex items-center gap-3">
+          {/* ZK Proof Logs Trigger */}
           <button
             onClick={onToggleLogs}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-xs font-mono text-cyan-400 border border-cyan-500/20 transition"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-cyan-950/60 hover:bg-cyan-900/80 text-cyan-300 text-xs font-medium border border-cyan-500/30 transition shadow-sm"
             title="View ZK Proof Logs"
           >
             <Cpu className="w-3.5 h-3.5" />
@@ -158,7 +159,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               <div className="flex flex-col text-left">
                 <span className="text-[10px] text-slate-400 font-mono flex items-center gap-1">
                   <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
-                  1AM Preprod Connected
+                  Lace / 1AM Connected
                 </span>
                 <span className="text-xs font-mono text-indigo-300 font-semibold">
                   {formatAddr(walletState.address!)}
@@ -177,7 +178,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               className="purple-glow-btn flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold text-white tracking-wide"
             >
               <Wallet className="w-4 h-4" />
-              Connect 1AM Wallet
+              Connect Lace / 1AM Wallet
             </button>
           )}
         </div>

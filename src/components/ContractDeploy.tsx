@@ -146,12 +146,12 @@ export const ContractDeploy: React.FC<ContractDeployProps> = ({
               {isDeploying ? (
                 <>
                   <Cpu className="w-4 h-4 animate-spin" />
-                  {deployStep || 'Deploying via 1AM Extension...'}
+                  {deployStep || 'Deploying via Lace / 1AM Extension...'}
                 </>
               ) : (
                 <>
                   <Rocket className="w-4 h-4" />
-                  Deploy Contract via 1AM Extension (Preprod)
+                  Deploy Contract via Lace / 1AM Extension (Preprod)
                 </>
               )}
             </button>

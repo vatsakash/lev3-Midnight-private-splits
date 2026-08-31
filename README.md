@@ -34,7 +34,7 @@
 | **Smart Contract** | Compact v0.23 | Minokawa ZK Proving System |
 | **Blockchain** | Midnight Preprod Network | Network ID: `preprod` |
 | **SDK & Connector** | Midnight.js SDK | `@midnight-ntwrk/dapp-connector-api` |
-| **Browser Wallet** | 1AM / Lace Extension | 100% In-Browser Prover & Transaction Provider |
+| **Browser Wallet** | Lace / 1AM Extension | 100% In-Browser Prover & Transaction Provider |
 | **Frontend Framework** | React 18 + TypeScript | Vite 6 Build Engine |
 | **Design & UI** | Tailwind CSS + Lucide Icons | Glassmorphism Electric Indigo & Cyan Theme |
 | **Testing** | Vitest | 4 Unit & ZK Privacy Tests Passing |
