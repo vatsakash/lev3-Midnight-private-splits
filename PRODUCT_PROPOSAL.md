@@ -4,7 +4,7 @@
 **Private Payroll / Splits** is a zero-knowledge confidential fund distribution application designed for web3 organizations, DAOs, companies, and freelancers. Built on the **Midnight Network** (Preprod Network) using the **Compact / Minokawa** smart contract language, it enables organizations to disburse funds and execute salary splits without exposing recipient wallet identities or individual compensation figures on a public blockchain ledger.
 
 - 🌐 **Live Deployed App**: [lev3-midnight-private-splits.vercel.app](https://lev3-midnight-private-splits.vercel.app/)
-- 🎥 **Demo Video Walkthrough**: [Watch Video Demo on Google Drive](https://drive.google.com/file/d/1EtDqa7OfEIXpTFXmZ51Ci7fefmtJVmuZ/view?usp=sharing)
+- 🎥 **Demo Video Walkthrough**: [Watch Video Demo on Google Drive](https://drive.google.com/file/d/1tNRzXDj9ZfjGCkL7-EgZPqYm-2ZupTN7/view?usp=sharing)
 - 💻 **GitHub Repository**: [github.com/vatsakash/lev3-Midnight-private-splits](https://github.com/vatsakash/lev3-Midnight-private-splits)
 
 ### 📸 Application & Deployment Screenshots
