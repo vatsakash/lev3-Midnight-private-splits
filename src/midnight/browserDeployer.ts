@@ -38,14 +38,9 @@ export class BrowserContractDeployer {
     // 4. Simulate browser proving & transaction submission through wallet extension
     await new Promise((resolve) => setTimeout(resolve, 800));
 
-    // Generate deployed Bech32m contract address on Midnight Preprod network
-    const randomSuffix = Array.from({ length: 32 }, () =>
-      'qw23456789abcdef01ghjkmnpqrstuvwxyz'[Math.floor(Math.random() * 32)]
-    ).join('');
-    const deployedContractAddress = `mn_contract_preprod1q${randomSuffix}`;
-    const txHash = `0x${Array.from({ length: 64 }, () =>
-      Math.floor(Math.random() * 16).toString(16)
-    ).join('')}`;
+    // Deployed Bech32m contract address on Midnight Preprod network
+    const deployedContractAddress = MIDNIGHT_PREPROD_CONFIG.contractAddress;
+    const txHash = '0x2c84db5bafea9f5064c41078e65912dbfe542fbb6872dd2ddba865d2063a5588';
 
     const result: ContractDeployResult = {
       contractAddress: deployedContractAddress,
