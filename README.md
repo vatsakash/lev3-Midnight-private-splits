@@ -27,6 +27,96 @@
 
 ---
 
+## 🛠️ Tech Stack & Tooling
+
+| Layer | Technology | Details |
+| :--- | :--- | :--- |
+| **Smart Contract** | Compact v0.23 | Minokawa ZK Proving System |
+| **Blockchain** | Midnight Preprod Network | Network ID: `preprod` |
+| **SDK & Connector** | Midnight.js SDK | `@midnight-ntwrk/dapp-connector-api` |
+| **Browser Wallet** | 1AM / Lace Extension | 100% In-Browser Prover & Transaction Provider |
+| **Frontend Framework** | React 18 + TypeScript | Vite 6 Build Engine |
+| **Design & UI** | Tailwind CSS + Lucide Icons | Glassmorphism Electric Indigo & Cyan Theme |
+| **Testing** | Vitest | 4 Unit & ZK Privacy Tests Passing |
+| **CI/CD & Hosting** | GitHub Actions + Vercel | Automated Build, Test & Deployment |
+
+---
+
+## 🏛️ System Architecture
+
+```mermaid
+graph TD
+    Employer[Employer / DAO Admin] -->|1. Connect 1AM Wallet| Extension[1AM Extension Prover]
+    Employer -->|2. Deploy Contract| DeployUI[Deploy Page /deploy]
+    DeployUI -->|3. Generate ZK Proof & Deploy| MidnightBC[Midnight Preprod Blockchain]
+    
+    Employer -->|4. Commit Private Salary Splits| ZKCircuit[Compact ZK Circuit]
+    ZKCircuit -->|5. Verify sum(splits) == total_budget| Ledger[Public Ledger State]
+    ZKCircuit -->|6. Encrypted Commitments| LocalState[Client Private State]
+    
+    Employee[Employee / Contractor] -->|7. Prove Witness Key| ClaimPortal[Employee Claim Portal]
+    ClaimPortal -->|8. Claim Shielded Payout| EmployeeWallet[1AM Wallet Extension]
+```
+
+---
+
+## 🔒 Privacy Flow: Step-by-Step State Model
+
+1. **Batch Initialization**: Employer specifies the public total budget on-chain (e.g. `50,000 tNIGHT`).
+2. **Confidential Allocation**: Employer creates private split commitments in client private state. The Compact ZK circuit enforces that the sum of all individual payouts equals the total budget (`sum(splits) == total_budget`) without exposing individual salary figures.
+3. **Batch Finalization**: Locking batch commitment hash into ledger state.
+4. **Zero-Knowledge Claim**: Employee proves ownership of their secret witness key inside the ZK circuit, claiming payouts directly into their 1AM wallet without exposing compensation figures to co-workers.
+5. **Auditor Selective Disclosure**: Compliance audit circuit (`disclose_payroll_audit`) allows authorized auditors to verify budget equality without de-anonymizing employee identities.
+
+---
+
+## 📂 Project Structure
+
+```
+lev3-Midnight-private-splits/
+├── .github/
+│   └── workflows/
+│       └── ci.yml                 # Automated CI/CD pipeline (lint, test, build)
+├── contracts/
+│   └── PrivatePayroll.compact     # Midnight Compact zero-knowledge smart contract
+├── docs/
+│   └── screenshots/               # UI and verification screenshots
+│       ├── browser_deploy_desktop.png
+│       ├── browser_deploy_mobile.png
+│       ├── ci_cd_vercel_checks.png
+│       └── vitest_test_output.png
+├── src/
+│   ├── components/
+│   │   ├── AdminPayroll.tsx       # Employer batch management UI
+│   │   ├── AuditDisclosure.tsx    # Selective disclosure compliance audit view
+│   │   ├── CircuitLogsModal.tsx   # ZK proof log inspector modal
+│   │   ├── ContractDeploy.tsx     # 1AM browser contract deployment (/deploy)
+│   │   ├── DeveloperIntegrationGuide.tsx # Integration diagnostics suite
+│   │   ├── EmployeeClaim.tsx      # Employee private payout claim portal
+│   │   ├── Navbar.tsx             # Wallet connector & tab navigation header
+│   │   └── PreprodExplorer.tsx    # Midnight Preprod network inspector
+│   ├── midnight/
+│   │   ├── browserDeployer.ts     # 1AM in-browser contract deployment engine
+│   │   ├── dappConnector.ts       # Midnight.js DApp connector & 1AM wallet manager
+│   │   ├── payrollSimulator.ts    # Compact circuit execution simulator
+│   │   └── types.ts               # TypeScript types and interfaces
+│   ├── App.tsx                    # Main application router and state manager
+│   ├── index.css                  # Tailwind styles & Electric Indigo/Cyan theme
+│   └── main.tsx                   # React entry point
+├── tests/
+│   └── PrivatePayroll.test.ts     # Vitest suite covering Compact circuits & ZK model
+├── index.html                     # HTML template with Plus Jakarta Sans & JetBrains Mono
+├── package.json                   # Project dependencies and script runner
+├── postcss.config.js              # PostCSS configuration
+├── PRODUCT_PROPOSAL.md            # Product proposal & architectural specification
+├── README.md                      # Primary project documentation
+├── tailwind.config.js             # Tailwind CSS configuration with extended theme
+├── tsconfig.json                  # TypeScript compiler options
+└── vercel.json                    # Vercel SPA routing configuration
+```
+
+---
+
 ## 1AM Extension Browser Contract Deployment (`/deploy`)
 
 This application deploys smart contracts **100% through the 1AM / Lace browser wallet extension**.
@@ -118,8 +208,3 @@ export circuit finalize_payroll(): []
 export circuit claim_payout(employeeCommitment: Bytes<32>, claimedAmount: Uint<64>): []
 export circuit disclose_payroll_audit(auditKey: Bytes<32>): Boolean
 ```
-
----
-
-## License
-MIT License. Built for the Midnight Network Ecosystem.
