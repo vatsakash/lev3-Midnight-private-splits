@@ -13,8 +13,8 @@ export const MIDNIGHT_PREPROD_CONFIG = {
   indexerUri: 'https://indexer.preprod.midnight.network/api/v4/graphql',
   indexerWsUri: 'wss://indexer.preprod.midnight.network/api/v4/graphql/ws',
   nodeRpcUri: 'https://rpc.preprod.midnight.network',
-  contractAddress: 'mn_contract_preprod1q9x74a87c0v28e53l90qw82k49z6m31f82y01',
-  originalContractHexAddress: '8131a6c88f0b726c57bcf471cf8831947749e4dc68bd458c3692af73605f74d3',
+  contractAddress: 'mn_contract_preprod1q8f7a42c9e5b3018d462f901ab34e56c871d9',
+  originalContractHexAddress: 'd8a9f2c417e5b3089d12f465c078b9a3e214d658f9071c34a8b25e71940c31ab',
 };
 
 // Generates a Bech32m address formatted for Midnight Preprod network
